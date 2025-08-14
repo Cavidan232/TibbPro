@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TİBBLE PRO | AI Destekli Təcili Yardım</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+    <style>
+        :root {
+            --med-red: #e63946;
+            --med-blue: #1d3557;
+            --med-cyan: #457b9d;
+            --med-light: #a8dadc;
+            --med-white: #f1faee;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        .emergency-alert {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #d90429 0%, #ef233c 100%);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(217, 4, 41, 0.5);
+            animation: pulseAlert 2s infinite;
+        }
+        
+        @keyframes pulseAlert {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #457b9d, #1d3557);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 999;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .medical-header {
+            background: linear-gradient(135deg, var(--med-blue) 0%, var(--med-cyan) 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .medical-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><path d="M30,10 L50,30 L70,10 L90,30 L70,50 L90,70 L70,90 L50,70 L30,90 L10,70 L30,50 L10,30 Z" fill="white"/></svg>');
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .logo::after {
+            content: "PRO";
+            position: absolute;
+            top: -10px;
+            right: -25px;
+            font-size: 1rem;
+            background: var(--med-red);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 20px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .emergency-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .emergency-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .card-header {
+            background: linear-gradient(45deg, var(--med-red), #d90429);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background: #e9ecef;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .paramedic-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .video-call-container {
+            position: relative;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #212529;
+        }
+        
+        #local-video {
+            width: 120px;
+            height: 90px;
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            border-radius: 8px;
+            border: 2px solid white;
+            z-index: 10;
+        }
+        
+        #remote-video {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--med-cyan), var(--med-blue));
+            color: white;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(45deg, var(--med-red), #d90429);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--med-blue);
+            color: var(--med-blue);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+        
+        .pulse {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #2ecc71;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(46, 204, 113, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+        }
+        
+        .notification {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--med-cyan);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .notification-icon {
+            font-size: 1.5rem;
+            color: var(--med-cyan);
+        }
+        
+        @media (max-width: 768px) {
+            .emergency-grid {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- AI Asistan Butonu -->
+    <div class="ai-assistant">
+        <i class="fas fa-robot"></i>
+    </div>
+    
+    <!-- Təcili Bildiriş -->
+    <div class="emergency-alert">
+        <i class="fas fa-exclamation-triangle"></i> TƏCİLİ YARDIM ÜÇÜN 112 NÖMRƏSİNİ ÇAĞIRIN VƏ YA AŞAĞIDAKI DÜYMƏYƏ BASIN
+    </div>
+    
+    <!-- Üst Hissə -->
+    <div class="medical-header">
+        <div class="logo">TİBBLE</div>
+        <div class="subtitle">AI Destekli Təcili Tibbi Yardım Platforması</div>
+    </div>
+    
+    <!-- Əsas Kontent -->
+    <div class="emergency-grid">
+        <!-- Konum və Xəritə Kartı -->
+        <div class="emergency-card">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-map-marked-alt"></i></div>
+                <h3>Real-time Konum Paylaşımı</h3>
+            </div>
+            <div class="card-body">
+                <p>Yardım komandasının sizə çatması üçün konumunuzu paylaşın:</p>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="getLocation()">
+                        <i class="fas fa-location-arrow"></i> Konumu Paylaş
+                    </button>
+                    <button class="btn btn-outline" onclick="shareLocation()">
+                        <i class="fas fa-share-alt"></i> Paylaş
+                    </button>
+                </div>
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                    <div class="paramedic-badge">
+                        <i class="fas fa-ambulance" style="color: var(--med-red);"></i>
+                        <span id="distance-to-help">Yaxınlaşan yardım: 4.2 km</span>
+                    </div>
+                </div>
+                
+                <div class="status-indicator">
+                    <div class="pulse"></div>
+                    <span id="location-status">Konum hazırlanır...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Görüşmə Kartı -->
+        <div class="emergency-card">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-video"></i></div>
+                <h3>Canlı Həkim Görüşməsi</h3>
+            </div>
+            <div class="card-body">
+                <p>Təcili tibbi məsləhət üçün həkimlə canlı görüşməyə qoşulun:</p>
+                
+                <div class="video-call-container">
+                    <video id="remote-video" autoplay></video>
+                    <video id="local-video" autoplay muted></video>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="startVideoCall()">
+                        <i class="fas fa-video"></i> Görüşməyə Başla
+                    </button>
+                    <button class="btn btn-danger" onclick="endVideoCall()" disabled id="end-call-btn">
+                        <i class="fas fa-phone-slash"></i> Bitir
+                    </button>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar" id="call-progress"></div>
+                </div>
+                <small>Həkimə qoşulmaq üçün yüklənir...</small>
+            </div>
+        </div>
+        
+        <!-- Təcili Yardım Kartı -->
+        <div class="emergency-card">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-ambulance"></i></div>
+                <h3>Təcili Yardım Çağır</h3>
+            </div>
+            <div class="card-body">
+                <p>Dərhal tibbi yardım tələb edirsinizsə:</p>
+                
+                <button class="btn btn-danger" style="width: 100%; padding: 15px; font-size: 1.2rem;" onclick="callEmergency()">
+                    <i class="fas fa-phone-alt"></i> 112-Nİ ÇAĞIR
+                </button>
+                
+                <div class="notification">
+                    <div class="notification-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div>
+                        <strong>Son çağrı:</strong> 2 dəqiqə əvvəl • Bakı, Nəsimi rayonu
+                    </div>
+                </div>
+                
+                <div class="notification">
+                    <div class="notification-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div>
+                        <strong>Yaxınlaşan ambulans:</strong> MED-112 • 3 dəqiqə
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tibbi Təlimatlar Kartı -->
+        <div class="emergency-card">
+            <div class="card-header">
+                <div class="card-icon"><i class="fas fa-first-aid"></i></div>
+                <h3>AI Tibbi Köməkçi</h3>
+            </div>
+            <div class="card-body">
+                <p>Vəziyyətinizə uyğun ilk yardım təlimatları:</p>
+                
+                <select class="btn" style="width: 100%; margin-bottom: 20px; padding: 12px;" id="emergency-type">
+                    <option value="">Təcili vəziyyət seçin...</option>
+                    <option value="heart">Ürək tutması</option>
+                    <option value="stroke">İnsult</option>
+                    <option value="bleeding">Qanaxma</option>
+                    <option value="burn">Yanıq</option>
+                    <option value="choking">Boğulma</option>
+                </select>
+                
+                <div id="ai-response" style="background: #f8f9fa; padding: 15px; border-radius: 10px; min-height: 150px;">
+                    <p style="text-align: center; color: #6c757d; margin-top: 50px;">
+                        <i class="fas fa-robot" style="font-size: 2rem; opacity: 0.5;"></i><br>
+                        Vəziyyət seçin, AI köməkçi sizə adım-adım təlimat verəcək
+                    </p>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="askAI()">
+                    <i class="fas fa-comment-medical"></i> AI-dan Kömək İstə
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+    <script>
+        // Xəritə Konfiqurasiyası
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjanZ6a2Z6MW0wYnVtM3lwN2Q1bTgwa2J6In0.abcdefghijk';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [49.8671, 40.4093], // Bakı koordinatları
+            zoom: 12
+        });
+        
+        // GPS İzləmə
+        function getLocation() {
+            const statusElement = document.getElementById('location-status');
+            statusElement.textContent = "Konum alınır...";
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        const { latitude, longitude } = position.coords;
+                        statusElement.textContent = `Konum alındı: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`;
+                        
+                        // Xəritədə yer markeri
+                        new mapboxgl.Marker({ color: '#e63946' })
+                            .setLngLat([longitude, latitude])
+                            .addTo(map);
+                            
+                        map.flyTo({
+                            center: [longitude, latitude],
+                            zoom: 15
+                        });
+                        
+                        // Yaxın tibb müəssisələrini tap
+                        findNearbyHospitals(latitude, longitude);
+                    },
+                    error => {
+                        statusElement.textContent = `Xəta: ${error.message}`;
+                    }
+                );
+            } else {
+                statusElement.textContent = "Brauzeriniz konum xidmətini dəstəkləmir";
+            }
+        }
+        
+        function findNearbyHospitals(lat, lng) {
+            // Mock data - real tətbiqdə Mapbox Places API istifadə ediləcək
+            document.getElementById('distance-to-help').textContent = "Yaxınlaşan yardım: 1.8 km";
+            
+            // Mock ambulans markeri
+            new mapboxgl.Marker({ color: '#1d3557' })
+                .setLngLat([49.8700, 40.4100])
+                .setPopup(new mapboxgl.Popup().setHTML("<b>Yaşamal Xəstəxanası</b><br>1.8 km uzaqlıqda"))
+                .addTo(map);
+        }
+        
+        // Video Görüşmə
+        function startVideoCall() {
+            const progressBar = document.getElementById('call-progress');
+            const endCallBtn = document.getElementById('end-call-btn');
+            
+            // Mock video görüşmə prosesi
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 5;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.querySelector('.video-call-container').innerHTML += `
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; justify-content: center; align-items: center; color: white; font-size: 1.5rem;">
+                            <div style="text-align: center;">
+                                <i class="fas fa-user-md" style="font-size: 3rem; margin-bottom: 15px;"></i><br>
+                                Həkimə qoşulur...
+                            </div>
+                        </div>
+                    `;
+                    endCallBtn.disabled = false;
+                }
+            }, 200);
+        }
+        
+        function endVideoCall() {
+            alert("Görüşmə bitdi. Təcili yardım komandası yoldadır.");
+            document.getElementById('call-progress').style.width = "0%";
+            document.getElementById('end-call-btn').disabled = true;
+        }
+        
+        // Təcili çağrı
+        function callEmergency() {
+            if (confirm("112 Təcili Yardım Xidmətini çağırmaq istəyirsiniz?")) {
+                window.location.href = "tel:112";
+            }
+        }
+        
+        // AI Köməkçi
+        function askAI() {
+            const emergencyType = document.getElementById('emergency-type').value;
+            const aiResponse = document.getElementById('ai-response');
+            
+            if (!emergencyType) {
+                aiResponse.innerHTML = `
+                    <div style="color: #e63946; text-align: center;">
+                        <i class="fas fa-exclamation-circle"></i> Zəhmət olmasa təcili vəziyyət növünü seçin
+                    </div>
+                `;
+                return;
+            }
+            
+            // Mock AI cavabları
+            const responses = {
+                heart: `
+                    <h4 style="color: #e63946; margin-bottom: 15px;"><i class="fas fa-heartbeat"></i> Ürək Tutması</h4>
+                    <ol style="padding-left: 20px;">
+                        <li style="margin-bottom: 10px;">Xəstəni sakit yerdə yatırın</li>
+                        <li style="margin-bottom: 10px;">Nəfəs yolunu açın (baş geriyə, çənə yuxarı)</li>
+                        <li style="margin-bottom: 10px;">300 mg aspirin çeynədib yutdurun (allergi yoxdursa)</li>
+                        <li style="margin-bottom: 10px;">CPR (sinə basısı) edin: döş qəfəsinin ortasına 5-6 sm dərinliyində basın</li>
+                        <li style="margin-bottom: 10px;">Dəqiqədə 100-120 basma tempi ilə davam edin</li>
+                    </ol>
+                    <div style="background: #e63946; color: white; padding: 10px; border-radius: 5px; margin-top: 15px;">
+                        <i class="fas fa-exclamation-triangle"></i> Dərhal 112-ni çağırın! Hər dəqiqə vacibdir.
+                    </div>
+                `,
+                stroke: `
+                    <h4 style="color: #1d3557; margin-bottom: 15px;"><i class="fas fa-brain"></i> İnsult (Beyin Qanaxması)</h4>
+                    <p><strong>FAST testini tətbiq edin:</strong></p>
+                    <ul style="padding-left: 20px; margin-bottom: 15px;">
+                        <li style="margin-bottom: 8px;"><strong>F</strong>ace (Üz): Gülümsəməsini xahiş edin - bir tərəf sallanır?</li>
+                        <li style="margin-bottom: 8px;"><strong>A</strong>rms (Qollar): Hər iki qolunu qaldırsın - bir qol aşağı düşür?</li>
+                        <li style="margin-bottom: 8px;"><strong>S</strong>peech (Nitq): Sadə cümlə desin - qəliz danışır?</li>
+                        <li style="margin-bottom: 8px;"><strong>T</strong>ime (Vaxt): Əgər bu əlamətlər varsa, DƏRHAL 112-ni çağırın!</li>
+                    </ul>
+                    <div style="background: #1d3557; color: white; padding: 10px; border-radius: 5px;">
+                        <i class="fas fa-clock"></i> İnsultda ilk 4.5 saat qızıl vaxt hesab olunur
+                    </div>
+                `,
+                // Digər cavablar...
+            };
+            
+            aiResponse.innerHTML = responses[emergencyType] || `
+                <div style="text-align: center; color: #6c757d;">
+                    <i class="fas fa-robot" style="font-size: 2rem;"></i><br>
+                    Seçim etdiyiniz vəziyyət üçün təlimatlar yüklənir...
+                </div>
+            `;
+            
+            // AI animasiyası
+            setTimeout(() => {
+                if (!responses[emergencyType]) {
+                    aiResponse.innerHTML = `
+                        <div style="color: #e63946; text-align: center;">
+                            <i class="fas fa-exclamation-triangle"></i> Bu vəziyyət üçün təlimat hazır deyil. Zəhmət olmasa 112-ni çağırın.
+                        </div>
+                    `;
+                }
+            }, 1500);
+        }
+        
+        // Konum paylaşımı
+        function shareLocation() {
+            alert("Konumunuz yaxınlarınıza SMS vasitəsilə göndəriləcək");
+            // Real tətbiqdə SMS API istifadə ediləcək
+        }
+        
+        // AI asistanı klik hadisəsi
+        document.querySelector('.ai-assistant').addEventListener('click', () => {
+            document.getElementById('ai-response').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('emergency-type').focus();
+        });
+    </script>
+</body>
+</html>
