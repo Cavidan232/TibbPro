@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TİBBLE ULTIMATE | Tam İşlək Təcili Yardım</title>
+    <title>TİBBLE PRO | Modal Dəstəkli Təcili Yardım</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     <style>
         :root {
-            --med-red: #E63946;
-            --med-dark: #1D3557;
-            --med-blue: #457B9D;
-            --med-light: #A8DADC;
-            --med-white: #F1FAEE;
-            --med-green: #2A9D8F;
+            --primary: #2C3E50;
+            --secondary: #34495E;
+            --accent: #E74C3C;
+            --light: #ECF0F1;
+            --dark: #2C3E50;
+            --success: #27AE60;
         }
         
         body {
-            font-family: 'Poppins', sans-serif;
-            background: #F8F9FA;
-            color: #212529;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
+            background-color: #F9FAFB;
+            color: var(--dark);
+            line-height: 1.6;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
         }
         
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -32,166 +38,217 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 1000;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         .modal-content {
             background: white;
-            border-radius: 20px;
+            border-radius: 12px;
             width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            padding: 30px;
-            position: relative;
-            animation: modalFadeIn 0.3s ease;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transform: translateY(20px);
+            animation: slideUp 0.3s ease forwards;
         }
         
-        @keyframes modalFadeIn {
-            from { opacity: 0; transform: translateY(-50px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideUp {
+            to { transform: translateY(0); }
+        }
+        
+        .modal-header {
+            background-color: var(--accent);
+            color: white;
+            padding: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin: 0;
         }
         
         .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            background: none;
+            border: none;
+            color: white;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--med-red);
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+        .modal-body {
+            padding: 2rem;
         }
         
+        .modal-footer {
+            padding: 1rem 2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        /* Professional Header */
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(44, 62, 80, 0.1);
         }
         
         .logo {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--med-red);
-            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
         }
         
         .tagline {
-            color: var(--med-dark);
             font-size: 1.2rem;
-            margin-bottom: 30px;
+            color: var(--secondary);
+            max-width: 700px;
+            margin: 0 auto;
         }
         
+        /* Clean Card Design */
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
+            gap: 2rem;
+            margin-bottom: 3rem;
         }
         
         .card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
         }
         
         .card-title {
             font-size: 1.5rem;
-            color: var(--med-dark);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--med-red);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            border-radius: 50px;
             font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        /* Elegant Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
-            margin-top: 15px;
+            text-decoration: none;
             border: none;
+            gap: 0.5rem;
         }
         
         .btn-primary {
-            background: linear-gradient(45deg, var(--med-red), #D90429);
+            background-color: var(--accent);
             color: white;
         }
         
+        .btn-primary:hover {
+            background-color: #C0392B;
+            transform: translateY(-2px);
+        }
+        
         .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid rgba(44, 62, 80, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        /* Emergency Section */
+        .emergency-section {
             background: white;
-            color: var(--med-dark);
-            border: 2px solid var(--med-blue);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
         
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .btn-block {
-            display: block;
-            width: 100%;
-        }
-        
-        .map-container {
-            height: 300px;
-            border-radius: 15px;
-            overflow: hidden;
-            margin-top: 20px;
-            position: relative;
-        }
-        
-        #map {
-            width: 100%;
-            height: 100%;
-        }
-        
-        .ambulance-status {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(255,255,255,0.9);
-            padding: 10px 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 1rem;
+        }
+        
+        .section-title i {
+            color: var(--accent);
+        }
+        
+        /* Map Container */
+        .map-container {
+            height: 400px;
+            background: #ECF0F1;
+            border-radius: 12px;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: white;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
         
         .status-indicator {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: var(--med-green);
+            background-color: var(--success);
             animation: pulse 1.5s infinite;
         }
         
@@ -201,119 +258,157 @@
             100% { opacity: 1; }
         }
         
-        .video-call-container {
-            position: relative;
-            height: 250px;
-            background: #E9ECEF;
-            border-radius: 15px;
-            margin-top: 20px;
-            overflow: hidden;
+        /* Emergency Button */
+        .emergency-btn {
+            width: 100%;
+            background-color: var(--accent);
+            color: white;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
-            justify-content: center;
             align-items: center;
-            color: var(--med-dark);
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 1.5rem;
         }
         
-        .video-call-icon {
-            font-size: 3rem;
-            color: var(--med-blue);
+        .emergency-btn:hover {
+            background-color: #C0392B;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
         }
         
-        .floating-btn {
+        /* Floating Action Button */
+        .fab {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: 2rem;
+            right: 2rem;
             width: 60px;
             height: 60px;
-            background: linear-gradient(45deg, var(--med-red), #D90429);
+            background-color: var(--accent);
             color: white;
             border-radius: 50%;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             font-size: 1.5rem;
-            box-shadow: 0 10px 30px rgba(233, 30, 99, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            z-index: 100;
             transition: all 0.3s ease;
+            z-index: 100;
         }
         
-        .floating-btn:hover {
+        .fab:hover {
             transform: scale(1.1) rotate(10deg);
+            background-color: #C0392B;
         }
         
+        /* Responsive Design */
         @media (max-width: 768px) {
             .card-grid {
                 grid-template-columns: 1fr;
             }
             
             .logo {
-                font-size: 2.5rem;
+                font-size: 2rem;
+            }
+            
+            .tagline {
+                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Modal Pəncərələr -->
-    <div id="videoCallModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('videoCallModal')">&times;</span>
-            <h2 style="color: var(--med-dark);"><i class="fas fa-video" style="color: var(--med-red);"></i> Canlı Həkim Görüşməsi</h2>
-            <div class="video-call-container" id="videoCallElement">
-                <div>
-                    <i class="fas fa-user-md video-call-icon"></i>
-                    <p>Həkimə qoşulur...</p>
-                </div>
-            </div>
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn btn-primary" onclick="startVideoCall()">
-                    <i class="fas fa-video"></i> Görüşməyə Başla
-                </button>
-                <button class="btn btn-secondary" onclick="closeModal('videoCallModal')">
-                    <i class="fas fa-times"></i> Bağla
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="firstAidModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('firstAidModal')">&times;</span>
-            <h2 style="color: var(--med-dark);"><i class="fas fa-first-aid" style="color: var(--med-red);"></i> İlkin Yardım Təlimatları</h2>
-            <div id="firstAidContent">
-                <!-- Dinamik olaraq yüklənəcək -->
-            </div>
-        </div>
-    </div>
-    
+    <!-- Ambulans Seçim Modalsı -->
     <div id="ambulanceModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('ambulanceModal')">&times;</span>
-            <h2 style="color: var(--med-dark);"><i class="fas fa-ambulance" style="color: var(--med-red);"></i> Ambulans Sifarişi</h2>
-            <div id="ambulanceSelection">
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Ambulans Növü</label>
-                    <select id="ambulanceType" style="width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #E9ECEF;">
-                        <option value="standard">Standart Ambulans (5-10 dəq)</option>
-                        <option value="reanimation">Reanimasiya Maşını (3-7 dəq)</option>
-                        <option value="patient">Xəstə Maşını (10-15 dəq)</option>
-                        <option value="helicopter">Tibb Helikopteri (15-30 dəq)</option>
-                    </select>
-                </div>
+            <div class="modal-header">
+                <h3 class="modal-title">Ambulans Seçimi</h3>
+                <button class="close-modal" onclick="closeModal('ambulanceModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Zəhmət olmasa, vəziyyətinizə uyğun ambulans növünü seçin:</p>
                 
-                <div style="margin-bottom: 20px;">
-                    <label style="display: block; margin-bottom: 8px; font-weight: 600;">Konum</label>
-                    <div class="map-container">
-                        <div id="modalMap"></div>
-                        <div class="ambulance-status">
-                            <div class="status-indicator"></div>
-                            <span id="modalArrivalTime">5-10 dəqiqə</span>
+                <div style="margin-top: 1.5rem;">
+                    <div style="display: flex; align-items: center; padding: 1rem; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 1rem; cursor: pointer;" onclick="selectAmbulanceType('standart')">
+                        <i class="fas fa-ambulance" style="font-size: 1.8rem; color: var(--accent); margin-right: 1rem;"></i>
+                        <div>
+                            <h4 style="margin: 0 0 0.3rem 0;">Standart Ambulans</h4>
+                            <p style="margin: 0; color: var(--secondary);">5-10 dəqiqə çatma müddəti</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 1rem; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; margin-bottom: 1rem; cursor: pointer;" onclick="selectAmbulanceType('reanimation')">
+                        <i class="fas fa-heartbeat" style="font-size: 1.8rem; color: var(--accent); margin-right: 1rem;"></i>
+                        <div>
+                            <h4 style="margin: 0 0 0.3rem 0;">Reanimasiya Maşını</h4>
+                            <p style="margin: 0; color: var(--secondary);">3-7 dəqiqə çatma müddəti</p>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; padding: 1rem; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px; cursor: pointer;" onclick="selectAmbulanceType('patient')">
+                        <i class="fas fa-procedures" style="font-size: 1.8rem; color: var(--accent); margin-right: 1rem;"></i>
+                        <div>
+                            <h4 style="margin: 0 0 0.3rem 0;">Xəstə Nəqliyyatı</h4>
+                            <p style="margin: 0; color: var(--secondary);">10-15 dəqiqə çatma müddəti</p>
                         </div>
                     </div>
                 </div>
-                
-                <button class="btn btn-primary btn-block" onclick="callEmergency()">
-                    <i class="fas fa-phone-alt"></i> 112-Nİ ÇAĞIR
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('ambulanceModal')">Ləğv et</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Konum Paylaşım Modalsı -->
+    <div id="locationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Konum Paylaşımı</h3>
+                <button class="close-modal" onclick="closeModal('locationModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="locationContent">
+                    <p>Yardım komandasının sizə çatması üçün konumunuzu paylaşın:</p>
+                    <div style="text-align: center; margin: 2rem 0;">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: var(--accent);"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('locationModal')">Ləğv et</button>
+                <button class="btn btn-primary" onclick="getLocation()">
+                    <i class="fas fa-location-arrow"></i> Konumu Paylaş
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Təcili Çağrı Təsdiq Modalsı -->
+    <div id="emergencyConfirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: var(--accent);">
+                <h3 class="modal-title">Təcili Yardım Çağırışı</h3>
+                <button class="close-modal" onclick="closeModal('emergencyConfirmModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: var(--accent);"></i>
+                </div>
+                <p style="text-align: center; font-size: 1.1rem;">112 Təcili Yardım Xidmətini çağırmaq istədiyinizə əminsiniz?</p>
+                <p style="text-align: center; color: var(--secondary); margin-top: 1rem;">Seçilmiş ambulans: <span id="selectedAmbulanceType">Standart Ambulans</span></p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('emergencyConfirmModal')">Ləğv et</button>
+                <button class="btn btn-primary" onclick="callEmergency()">
+                    <i class="fas fa-phone-alt"></i> Təsdiqlə və Çağır
                 </button>
             </div>
         </div>
@@ -322,300 +417,190 @@
     <!-- Əsas Kontent -->
     <div class="container">
         <div class="header">
-            <div class="logo">TİBBLE ULTIMATE</div>
-            <div class="tagline">Tam işlək təcili tibbi yardım platforması</div>
+            <div class="logo">TİBBLE PRO</div>
+            <p class="tagline">Professional təcili tibbi yardım platforması - sürətli, etibarlı və effektiv</p>
         </div>
         
         <div class="card-grid">
             <div class="card">
-                <h3 class="card-title">
-                    <div class="card-icon">
-                        <i class="fas fa-ambulance"></i>
-                    </div>
-                    Təcili Yardım Çağır
-                </h3>
-                <p>Ən yaxın ambulansı sifariş edin və real vaxt rejimində izləyin.</p>
+                <div class="card-icon">
+                    <i class="fas fa-ambulance"></i>
+                </div>
+                <h3 class="card-title">Təcili Yardım Çağır</h3>
+                <p>Vəziyyətinizə uyğun tibbi nəqliyyat seçin və 112-yə bir kliklə qoşulun.</p>
                 <button class="btn btn-primary" onclick="openModal('ambulanceModal')">
-                    <i class="fas fa-phone-alt"></i> AMBULANS ÇAĞIR
+                    <i class="fas fa-chevron-right"></i> Seçim edin
                 </button>
             </div>
             
             <div class="card">
-                <h3 class="card-title">
-                    <div class="card-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    Həkimlə Görüş
-                </h3>
-                <p>Təcili tibbi məsləhət üçün həkimlə canlı video görüşmə edin.</p>
-                <button class="btn btn-primary" onclick="openModal('videoCallModal')">
-                    <i class="fas fa-video"></i> GÖRÜŞMƏYƏ BAŞLA
+                <div class="card-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3 class="card-title">Həkimlə Görüş</h3>
+                <p>Təcili tibbi məsləhət üçün həkimlə canlı görüşməyə qoşulun.</p>
+                <button class="btn btn-primary" onclick="startVideoCall()">
+                    <i class="fas fa-chevron-right"></i> Görüşməyə başla
                 </button>
             </div>
             
             <div class="card">
-                <h3 class="card-title">
-                    <div class="card-icon">
-                        <i class="fas fa-first-aid"></i>
-                    </div>
-                    İlkin Yardım
-                </h3>
-                <p>Vəziyyətinizə uyğun ilk yardım təlimatlarını öyrənin.</p>
-                <button class="btn btn-primary" onclick="loadFirstAidContent('heart')">
-                    <i class="fas fa-heartbeat"></i> TƏLİMATLAR
+                <div class="card-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                </div>
+                <h3 class="card-title">Konum Paylaş</h3>
+                <p>Yardım komandasının sizə daha tez çatması üçün konumunuzu paylaşın.</p>
+                <button class="btn btn-primary" onclick="openModal('locationModal')">
+                    <i class="fas fa-chevron-right"></i> Paylaş
                 </button>
             </div>
         </div>
         
-        <div class="card">
-            <h3 class="card-title">
-                <div class="card-icon">
-                    <i class="fas fa-map-marked-alt"></i>
-                </div>
-                Konum Paylaş
-            </h3>
-            <p>Yardım komandasının sizə daha tez çatması üçün konumunuzu paylaşın.</p>
+        <div class="emergency-section">
+            <h2 class="section-title">
+                <i class="fas fa-location-arrow"></i> Real-time İzləmə
+            </h2>
+            
+            <p>Yardım komandanızın sizə çatma marşrutunu canlı izləyin.</p>
             
             <div class="map-container">
-                <div id="mainMap"></div>
-                <div class="ambulance-status">
+                <p>Xəritə yüklənir...</p>
+                <div class="map-overlay">
                     <div class="status-indicator"></div>
-                    <span id="mainArrivalTime">Konumunuzu paylaşın</span>
+                    <span id="arrival-time">Konumunuzu paylaşın</span>
                 </div>
             </div>
             
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <button class="btn btn-secondary" onclick="getLocation()">
-                    <i class="fas fa-location-arrow"></i> KONUMU AL
-                </button>
-                <button class="btn btn-secondary" onclick="shareLocation()">
-                    <i class="fas fa-share-alt"></i> PAYLAŞ
-                </button>
-            </div>
+            <button class="emergency-btn" onclick="confirmEmergency()">
+                <i class="fas fa-phone-alt"></i> 112 TƏCİLİ YARDIM ÇAĞIR
+            </button>
         </div>
     </div>
     
-    <!-- Üzən Təcili Düymə -->
-    <div class="floating-btn" onclick="callEmergency()">
+    <div class="fab" onclick="confirmEmergency()">
         <i class="fas fa-phone-alt"></i>
     </div>
     
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script>
-        // Xəritə Konfiqurasiyası
-        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjanZ6a2Z6MW0wYnVtM3lwN2Q1bTgwa2J6In0.abcdefghijk';
-        
-        // Əsas xəritə
-        const mainMap = new mapboxgl.Map({
-            container: 'mainMap',
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [49.8671, 40.4093], // Bakı koordinatları
-            zoom: 12
-        });
-        
-        // Modal xəritə
-        const modalMap = new mapboxgl.Map({
-            container: 'modalMap',
-            style: 'mapbox://styles/mapbox/streets-v12',
-            center: [49.8671, 40.4093],
-            zoom: 14
-        });
-        
         // Modal funksiyaları
         function openModal(modalId) {
             document.getElementById(modalId).style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            
-            if (modalId === 'ambulanceModal') {
-                updateAmbulanceArrivalTime();
-            }
         }
         
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
             document.body.style.overflow = 'auto';
-            
-            if (modalId === 'videoCallModal') {
-                stopVideoStream();
-            }
         }
         
-        // Video görüşmə funksiyaları
-        function startVideoCall() {
-            const videoElement = document.getElementById('videoCallElement');
-            videoElement.innerHTML = `
-                <video id="remoteVideo" autoplay style="width: 100%; height: 100%; object-fit: cover;"></video>
-                <video id="localVideo" autoplay muted style="position: absolute; bottom: 15px; right: 15px; width: 120px; height: 90px; border-radius: 8px; border: 2px solid white;"></video>
-            `;
-            
-            // Mock video stream (real tətbiqdə WebRTC istifadə olunacaq)
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-                .then(stream => {
-                    document.getElementById('localVideo').srcObject = stream;
-                    
-                    // Mock həkim görüntüsü
-                    setTimeout(() => {
-                        document.getElementById('remoteVideo').innerHTML = `
-                            <source src="https://example.com/doctor-stream" type="video/mp4">
-                        `;
-                    }, 1500);
-                })
-                .catch(err => {
-                    alert("Kamera və mikrofon icazəsi lazımdır: " + err.message);
-                });
-        }
+        // Ambulans seçimi
+        let selectedAmbulance = {
+            type: 'standart',
+            name: 'Standart Ambulans',
+            time: '5-10 dəqiqə'
+        };
         
-        function stopVideoStream() {
-            const localVideo = document.getElementById('localVideo');
-            if (localVideo && localVideo.srcObject) {
-                localVideo.srcObject.getTracks().forEach(track => track.stop());
+        function selectAmbulanceType(type) {
+            switch(type) {
+                case 'standart':
+                    selectedAmbulance = {
+                        type: 'standart',
+                        name: 'Standart Ambulans',
+                        time: '5-10 dəqiqə'
+                    };
+                    break;
+                case 'reanimation':
+                    selectedAmbulance = {
+                        type: 'reanimation',
+                        name: 'Reanimasiya Maşını',
+                        time: '3-7 dəqiqə'
+                    };
+                    break;
+                case 'patient':
+                    selectedAmbulance = {
+                        type: 'patient',
+                        name: 'Xəstə Nəqliyyatı',
+                        time: '10-15 dəqiqə'
+                    };
+                    break;
             }
             
-            // Reset video container
-            document.getElementById('videoCallElement').innerHTML = `
-                <div>
-                    <i class="fas fa-user-md video-call-icon"></i>
-                    <p>Həkimə qoşulur...</p>
+            document.getElementById('arrival-time').textContent = selectedAmbulance.time;
+            document.getElementById('selectedAmbulanceType').textContent = selectedAmbulance.name;
+            closeModal('ambulanceModal');
+        }
+        
+        // Konum paylaşımı
+        function getLocation() {
+            const locationContent = document.getElementById('locationContent');
+            locationContent.innerHTML = `
+                <p>Konumunuz alınır...</p>
+                <div style="text-align: center; margin: 2rem 0;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--accent);"></i>
                 </div>
             `;
-        }
-        
-        // İlkin yardım məzmunu
-        function loadFirstAidContent(type) {
-            const content = {
-                heart: `
-                    <h3 style="color: var(--med-red);"><i class="fas fa-heartbeat"></i> Ürək Tutması</h3>
-                    <ol>
-                        <li>Xəstəni sakit yerdə yatırın</li>
-                        <li>Nəfəs yolunu açın (baş geriyə, çənə yuxarı)</li>
-                        <li>300 mg aspirin çeynədib yutdurun (allergi yoxdursa)</li>
-                        <li>CPR (sinə basısı) edin: döş qəfəsinin ortasına 5-6 sm dərinliyində basın</li>
-                        <li>Dəqiqədə 100-120 basma tempi ilə davam edin</li>
-                    </ol>
-                    <div style="background: rgba(230, 57, 70, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
-                        <i class="fas fa-exclamation-triangle" style="color: var(--med-red);"></i> Dərhal 112-ni çağırın! Hər dəqiqə vacibdir.
-                    </div>
-                `,
-                stroke: `
-                    <h3 style="color: var(--med-dark);"><i class="fas fa-brain"></i> İnsult (Beyin Qanaxması)</h3>
-                    <p><strong>FAST testini tətbiq edin:</strong></p>
-                    <ul>
-                        <li><strong>F</strong>ace (Üz): Gülümsəməsini xahiş edin - bir tərəf sallanır?</li>
-                        <li><strong>A</strong>rms (Qollar): Hər iki qolunu qaldırsın - bir qol aşağı düşür?</li>
-                        <li><strong>S</strong>peech (Nitq): Sadə cümlə desin - qəliz danışır?</li>
-                        <li><strong>T</strong>ime (Vaxt): Əgər bu əlamətlər varsa, DƏRHAL 112-ni çağırın!</li>
-                    </ul>
-                `,
-                bleeding: `
-                    <h3 style="color: var(--med-red);"><i class="fas fa-tint"></i> Şiddətli Qanaxma</h3>
-                    <ol>
-                        <li>Təmiz parça və ya steril tülbənd istifadə edin</li>
-                        <li>Yaranın üzərinə birbaşa qoyun</li>
-                        <li>Güclü təzyiq tətbiq edin</li>
-                        <li>Əgər qan keçirsə, üstünə əlavə parça əlavə edin</li>
-                        <li>Yaralı üzvü ürəkdən yuxarı qaldırın</li>
-                    </ol>
-                `
-            };
             
-            document.getElementById('firstAidContent').innerHTML = content[type] || content['heart'];
-            openModal('firstAidModal');
-        }
-        
-        // Ambulans çatma müddəti
-        function updateAmbulanceArrivalTime() {
-            const ambulanceType = document.getElementById('ambulanceType').value;
-            let timeText = '';
-            
-            switch(ambulanceType) {
-                case 'standard': timeText = '5-10 dəqiqə'; break;
-                case 'reanimation': timeText = '3-7 dəqiqə'; break;
-                case 'patient': timeText = '10-15 dəqiqə'; break;
-                case 'helicopter': timeText = '15-30 dəqiqə'; break;
-            }
-            
-            document.getElementById('modalArrivalTime').textContent = timeText;
-            document.getElementById('mainArrivalTime').textContent = timeText;
-        }
-        
-        // Konum funksiyaları
-        function getLocation() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     position => {
                         const { latitude, longitude } = position.coords;
-                        
-                        // Əsas xəritəni yenilə
-                        mainMap.flyTo({
-                            center: [longitude, latitude],
-                            zoom: 15
-                        });
-                        
-                        new mapboxgl.Marker({ color: '#E63946' })
-                            .setLngLat([longitude, latitude])
-                            .addTo(mainMap);
-                        
-                        // Modal xəritəni yenilə
-                        modalMap.flyTo({
-                            center: [longitude, latitude],
-                            zoom: 15
-                        });
-                        
-                        new mapboxgl.Marker({ color: '#E63946' })
-                            .setLngLat([longitude, latitude])
-                            .addTo(modalMap);
-                            
-                        // Yaxın ambulansı göstər (mock)
-                        new mapboxgl.Marker({ color: '#457B9D' })
-                            .setLngLat([longitude + 0.01, latitude + 0.01])
-                            .setPopup(new mapboxgl.Popup().setHTML("<b>Yaxınlaşan Ambulans</b>"))
-                            .addTo(mainMap);
-                            
-                        new mapboxgl.Marker({ color: '#457B9D' })
-                            .setLngLat([longitude + 0.01, latitude + 0.01])
-                            .addTo(modalMap);
-                            
-                        alert(`Konumunuz uğurla alındı:\nEnlem: ${latitude.toFixed(6)}\nUzunluq: ${longitude.toFixed(6)}`);
+                        locationContent.innerHTML = `
+                            <p>Konumunuz uğurla alındı:</p>
+                            <div style="background: var(--light); padding: 1rem; border-radius: 8px; margin: 1.5rem 0; font-family: monospace;">
+                                <div>Enlem: ${latitude.toFixed(6)}</div>
+                                <div>Uzunluq: ${longitude.toFixed(6)}</div>
+                            </div>
+                            <p>Təcili komanda bu məlumatlara əsasən sizə çatacaq.</p>
+                        `;
+                        document.getElementById('arrival-time').textContent = selectedAmbulance.time;
                     },
                     error => {
-                        alert(`Konum alınmadı: ${error.message}`);
+                        locationContent.innerHTML = `
+                            <p style="color: var(--accent);">Konum alınmadı: ${error.message}</p>
+                            <div style="text-align: center; margin: 1.5rem 0;">
+                                <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--accent);"></i>
+                            </div>
+                            <p>Zəhmət olmasa, brauzer ayarlarınızdan konum icazələrini yoxlayın.</p>
+                        `;
                     }
                 );
             } else {
-                alert("Brauzeriniz konum xidmətini dəstəkləmir");
+                locationContent.innerHTML = `
+                    <p style="color: var(--accent);">Brauzeriniz konum xidmətini dəstəkləmir</p>
+                    <div style="text-align: center; margin: 1.5rem 0;">
+                        <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--accent);"></i>
+                    </div>
+                `;
             }
-        }
-        
-        function shareLocation() {
-            alert("Konumunuz yaxınlarınıza SMS vasitəsilə paylaşılacaq (demo)");
-            // Real tətbiqdə SMS API istifadə olunacaq
         }
         
         // Təcili çağrı
-        function callEmergency() {
-            const ambulanceType = document.getElementById('ambulanceType')?.value || 'standard';
-            let ambulanceText = '';
-            
-            switch(ambulanceType) {
-                case 'standard': ambulanceText = 'Standart Ambulans'; break;
-                case 'reanimation': ambulanceText = 'Reanimasiya Maşını'; break;
-                case 'patient': ambulanceText = 'Xəstə Maşını'; break;
-                case 'helicopter': ambulanceText = 'Tibb Helikopteri'; break;
-            }
-            
-            if (confirm(`${ambulanceText} çağırmaq üçün 112 nömrəsini səsləndirmək istəyirsiniz?`)) {
-                window.location.href = "tel:112";
-            }
+        function confirmEmergency() {
+            document.getElementById('selectedAmbulanceType').textContent = selectedAmbulance.name;
+            openModal('emergencyConfirmModal');
         }
         
-        // Səhifə yüklənəndə
-        document.addEventListener('DOMContentLoaded', function() {
-            // Ambulans növü dəyişdikdə
-            document.getElementById('ambulanceType')?.addEventListener('change', updateAmbulanceArrivalTime);
+        function callEmergency() {
+            closeModal('emergencyConfirmModal');
             
-            // İlkin yardım məzmunu yüklə
-            loadFirstAidContent('heart');
-        });
+            // Çağrı animasiyası
+            const emergencyBtn = document.querySelector('.emergency-btn');
+            const originalText = emergencyBtn.innerHTML;
+            emergencyBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Çağrı edilir...';
+            emergencyBtn.disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = "tel:112";
+                emergencyBtn.innerHTML = originalText;
+                emergencyBtn.disabled = false;
+            }, 2000);
+        }
+        
+        // Həkim görüşməsi
+        function startVideoCall() {
+            openModal('videoCallModal'); // Bu hissəni real tətbiqdə WebRTC ilə tamamlamaq lazımdır
+            alert("Həkimlə video görüşmə funksiyası hazırlıq mərhələsindədir");
+        }
     </script>
 </body>
 </html>
