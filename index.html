@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TİBBLE PRO | Modal Dəstəkli Təcili Yardım</title>
+    <title>TİBBLE PRO | Tam Çevik Təcili Tibbi Yardım Platforması</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -13,6 +13,8 @@
             --light: #ECF0F1;
             --dark: #2C3E50;
             --success: #27AE60;
+            --warning: #F39C12;
+            --info: #3498DB;
         }
         
         body {
@@ -61,6 +63,10 @@
             animation: slideUp 0.3s ease forwards;
         }
         
+        .large-modal {
+            max-width: 800px;
+        }
+        
         @keyframes slideUp {
             to { transform: translateY(0); }
         }
@@ -72,6 +78,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+        
+        .modal-header.info {
+            background-color: var(--info);
+        }
+        
+        .modal-header.success {
+            background-color: var(--success);
         }
         
         .modal-title {
@@ -90,6 +104,8 @@
         
         .modal-body {
             padding: 2rem;
+            max-height: 70vh;
+            overflow-y: auto;
         }
         
         .modal-footer {
@@ -150,6 +166,14 @@
             margin-bottom: 1.5rem;
         }
         
+        .card-icon.info {
+            color: var(--info);
+        }
+        
+        .card-icon.success {
+            color: var(--success);
+        }
+        
         .card-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -191,6 +215,26 @@
         .btn-secondary:hover {
             border-color: var(--accent);
             color: var(--accent);
+        }
+        
+        .btn-info {
+            background-color: var(--info);
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background-color: #2980B9;
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background-color: #219955;
+            transform: translateY(-2px);
         }
         
         /* Emergency Section */
@@ -308,6 +352,153 @@
             background-color: #C0392B;
         }
         
+        /* Video Call Container */
+        .video-container {
+            width: 100%;
+            background: #333;
+            border-radius: 8px;
+            aspect-ratio: 16/9;
+            position: relative;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-direction: column;
+        }
+        
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: all 0.2s ease;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .control-btn.end-call {
+            background: var(--accent);
+            color: white;
+        }
+        
+        /* Doctor List */
+        .doctor-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .doctor-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .doctor-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--light);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .doctor-name {
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .doctor-specialty {
+            text-align: center;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .doctor-rating {
+            display: flex;
+            justify-content: center;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .doctor-rating i {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+        
+        /* Pharmacy Section */
+        .pharmacy-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            cursor: pointer;
+        }
+        
+        .pharmacy-icon {
+            font-size: 1.8rem;
+            color: var(--info);
+            margin-right: 1rem;
+        }
+        
+        /* Health Profile */
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-field {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        
+        .profile-label {
+            font-weight: 600;
+            width: 150px;
+            color: var(--secondary);
+        }
+        
+        .profile-value {
+            flex: 1;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .card-grid {
@@ -320,6 +511,14 @@
             
             .tagline {
                 font-size: 1rem;
+            }
+            
+            .doctor-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                width: 95%;
             }
         }
     </style>
@@ -414,11 +613,253 @@
         </div>
     </div>
     
+    <!-- Həkimlə Görüş Modalsı -->
+    <div id="doctorModal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header info">
+                <h3 class="modal-title">Həkimlə Görüş</h3>
+                <button class="close-modal" onclick="closeModal('doctorModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="doctorModalContent">
+                    <div id="doctorSelectionView">
+                        <p>İndiki vəziyyətinizə uyğun həkim seçin və ya təcili tibbi məsləhət üçün görüşməyə başlayın:</p>
+                        
+                        <div class="doctor-list">
+                            <div class="doctor-card" onclick="selectDoctor('dr1')">
+                                <div class="doctor-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="doctor-name">Dr. Əliyev Rəşad</div>
+                                <div class="doctor-specialty">Ümumi Həkim</div>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <button class="btn btn-info" style="width: 100%;">
+                                    <i class="fas fa-video"></i> Görüşə başla
+                                </button>
+                            </div>
+                            
+                            <div class="doctor-card" onclick="selectDoctor('dr2')">
+                                <div class="doctor-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="doctor-name">Dr. Hüseynova Ləman</div>
+                                <div class="doctor-specialty">Kardiolog</div>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <button class="btn btn-info" style="width: 100%;">
+                                    <i class="fas fa-video"></i> Görüşə başla
+                                </button>
+                            </div>
+                            
+                            <div class="doctor-card" onclick="selectDoctor('dr3')">
+                                <div class="doctor-avatar">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="doctor-name">Dr. Qarayev Elvin</div>
+                                <div class="doctor-specialty">Pediatr</div>
+                                <div class="doctor-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <button class="btn btn-info" style="width: 100%;">
+                                    <i class="fas fa-video"></i> Görüşə başla
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="videoCallView" style="display: none;">
+                        <div class="video-container">
+                            <div class="video-placeholder">
+                                <i class="fas fa-user-md" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                                <p>Həkimə qoşulur...</p>
+                            </div>
+                        </div>
+                        
+                        <div class="video-controls">
+                            <div class="control-btn" onclick="toggleMute()">
+                                <i class="fas fa-microphone"></i>
+                            </div>
+                            <div class="control-btn" onclick="toggleVideo()">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="control-btn end-call" onclick="endCall()">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 2rem;">
+                            <h4 style="margin-bottom: 1rem;">Səhiyyə vəziyyətiniz haqqında qeydlər:</h4>
+                            <textarea style="width: 100%; padding: 1rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); min-height: 100px;" placeholder="Həkimə öz vəziyyətinizi daha yaxşı izah etmək üçün buraya qeydlər yaza bilərsiniz..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('doctorModal')">Bağla</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Əczaçılıq və Dərman Sifarişi Modalsı -->
+    <div id="pharmacyModal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header success">
+                <h3 class="modal-title">Əczaçılıq Xidməti</h3>
+                <button class="close-modal" onclick="closeModal('pharmacyModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="pharmacyModalContent">
+                    <p>Yaxınlıqdakı əczaxanalardan dərman sifariş edə və ya təcili dərman çatdırılması xidmətindən istifadə edə bilərsiniz:</p>
+                    
+                    <div style="margin-top: 2rem;">
+                        <div class="pharmacy-item" onclick="selectPharmacy('ph1')">
+                            <div class="pharmacy-icon">
+                                <i class="fas fa-prescription-bottle-alt"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0 0 0.3rem 0;">Sehirli Əczaçılıq</h4>
+                                <p style="margin: 0; color: var(--secondary);">0.8 km məsafədə • 10 dəq çatdırılma</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pharmacy-item" onclick="selectPharmacy('ph2')">
+                            <div class="pharmacy-icon">
+                                <i class="fas fa-clinic-medical"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0 0 0.3rem 0;">MediCare Əczaçılıq</h4>
+                                <p style="margin: 0; color: var(--secondary);">1.2 km məsafədə • 15 dəq çatdırılma</p>
+                            </div>
+                        </div>
+                        
+                        <div class="pharmacy-item" onclick="selectPharmacy('ph3')">
+                            <div class="pharmacy-icon">
+                                <i class="fas fa-first-aid"></i>
+                            </div>
+                            <div>
+                                <h4 style="margin: 0 0 0.3rem 0;">Təcili Dərman Xidməti</h4>
+                                <p style="margin: 0; color: var(--secondary);">7/24 xidmət • 30 dəq çatdırılma</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <h4 style="margin-bottom: 1rem;">Dərman axtarışı:</h4>
+                        <div style="display: flex; gap: 1rem;">
+                            <input type="text" style="flex: 1; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1);" placeholder="Dərman adını daxil edin...">
+                            <button class="btn btn-success">
+                                <i class="fas fa-search"></i> Axtar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('pharmacyModal')">Bağla</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Səhiyyə Profili Modalsı -->
+    <div id="profileModal" class="modal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Səhiyyə Profiliniz</h3>
+                <button class="close-modal" onclick="closeModal('profileModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-section">
+                    <h4 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-user-circle"></i> Şəxsi Məlumatlar
+                    </h4>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Tam ad:</div>
+                        <div class="profile-value">Nermin Quliyeva</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Doğum tarixi:</div>
+                        <div class="profile-value">15.03.1985</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Qan qrupu:</div>
+                        <div class="profile-value">A Rh+</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Əlaqə nömrəsi:</div>
+                        <div class="profile-value">+994 50 123 45 67</div>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h4 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-heartbeat"></i> Tibbi Məlumatlar
+                    </h4>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Xroniki xəstəliklər:</div>
+                        <div class="profile-value">Hipertensiya, Tip 2 Diabet</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Allergiyalar:</div>
+                        <div class="profile-value">Penicillin</div>
+                    </div>
+                    
+                    <div class="profile-field">
+                        <div class="profile-label">Davamlı qəbul etdiyi dərmanlar:</div>
+                        <div class="profile-value">Metformin, Lisinopril</div>
+                    </div>
+                </div>
+                
+                <div class="profile-section">
+                    <h4 style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-file-medical"></i> Son Tibbi Qeydlər
+                    </h4>
+                    
+                    <div style="background: var(--light); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">15.06.2023 - Ümumi yoxlama</div>
+                        <div style="color: var(--secondary);">Qan təzyiqi: 130/85, Şəkər: 6.2 mmol/L. Ümumi vəziyyət yaxşıdır.</div>
+                    </div>
+                    
+                    <div style="background: var(--light); padding: 1rem; border-radius: 8px;">
+                        <div style="font-weight: 600; margin-bottom: 0.5rem;">02.03.2023 - Kardiolog konsultasiyası</div>
+                        <div style="color: var(--secondary);">EKG normaldır. Yüngül taşikardiya müşahidə edilib.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('profileModal')">Bağla</button>
+                <button class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Profili redaktə et
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <!-- Əsas Kontent -->
     <div class="container">
         <div class="header">
             <div class="logo">TİBBLE PRO</div>
-            <p class="tagline">Professional təcili tibbi yardım platforması - sürətli, etibarlı və effektiv</p>
+            <p class="tagline">Tam çevik təcili tibbi yardım platforması - sürətli, etibarlı və effektiv</p>
         </div>
         
         <div class="card-grid">
@@ -434,12 +875,12 @@
             </div>
             
             <div class="card">
-                <div class="card-icon">
+                <div class="card-icon info">
                     <i class="fas fa-user-md"></i>
                 </div>
                 <h3 class="card-title">Həkimlə Görüş</h3>
-                <p>Təcili tibbi məsləhət üçün həkimlə canlı görüşməyə qoşulun.</p>
-                <button class="btn btn-primary" onclick="startVideoCall()">
+                <p>Təcili tibbi məsləhət üçün həkimlə canlı video görüşməyə qoşulun.</p>
+                <button class="btn btn-info" onclick="openModal('doctorModal')">
                     <i class="fas fa-chevron-right"></i> Görüşməyə başla
                 </button>
             </div>
@@ -452,6 +893,39 @@
                 <p>Yardım komandasının sizə daha tez çatması üçün konumunuzu paylaşın.</p>
                 <button class="btn btn-primary" onclick="openModal('locationModal')">
                     <i class="fas fa-chevron-right"></i> Paylaş
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon success">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                </div>
+                <h3 class="card-title">Əczaçılıq Xidməti</h3>
+                <p>Yaxın əczaxanalardan dərman sifariş edin və ya təcili çatdırılma xidməti alın.</p>
+                <button class="btn btn-success" onclick="openModal('pharmacyModal')">
+                    <i class="fas fa-chevron-right"></i> Sifariş et
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-file-medical"></i>
+                </div>
+                <h3 class="card-title">Səhiyyə Profili</h3>
+                <p>Tibbi tarixçəniz, allergiyalarınız və qəbul etdiyiniz dərmanlar haqqında məlumat.</p>
+                <button class="btn btn-primary" onclick="openModal('profileModal')">
+                    <i class="fas fa-chevron-right"></i> Profilə bax
+                </button>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <h3 class="card-title">Təcili İlk Yardım</h3>
+                <p>Təcili vəziyyətlər üçün ilk yardım təlimatları və təlimat videoları.</p>
+                <button class="btn btn-primary" onclick="showFirstAid()">
+                    <i class="fas fa-chevron-right"></i> Öyrən
                 </button>
             </div>
         </div>
@@ -596,10 +1070,87 @@
             }, 2000);
         }
         
-        // Həkim görüşməsi
-        function startVideoCall() {
-            openModal('videoCallModal'); // Bu hissəni real tətbiqdə WebRTC ilə tamamlamaq lazımdır
-            alert("Həkimlə video görüşmə funksiyası hazırlıq mərhələsindədir");
+        // Həkim görüşməsi funksiyaları
+        let selectedDoctor = null;
+        let isMuted = false;
+        let isVideoOff = false;
+        
+        function selectDoctor(doctorId) {
+            selectedDoctor = doctorId;
+            document.getElementById('doctorSelectionView').style.display = 'none';
+            document.getElementById('videoCallView').style.display = 'block';
+            
+            // Simulyasiya: Həkimə qoşulma
+            setTimeout(() => {
+                const videoPlaceholder = document.querySelector('.video-placeholder');
+                videoPlaceholder.innerHTML = `
+                    <div style="position: relative; width: 100%; height: 100%;">
+                        <div style="position: absolute; bottom: 10px; right: 10px; width: 30%; height: 30%; background: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                            <div style="width: 120px; height: 120px; border-radius: 50%; background: var(--info); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                <i class="fas fa-user-md" style="font-size: 3rem; color: white;"></i>
+                            </div>
+                            <h3 style="color: white; margin: 0;">${getDoctorName(doctorId)}</h3>
+                            <p style="color: rgba(255,255,255,0.8);">Görüşmə davam edir...</p>
+                        </div>
+                    </div>
+                `;
+            }, 1500);
+        }
+        
+        function getDoctorName(doctorId) {
+            switch(doctorId) {
+                case 'dr1': return 'Dr. Əliyev Rəşad';
+                case 'dr2': return 'Dr. Hüseynova Ləman';
+                case 'dr3': return 'Dr. Qarayev Elvin';
+                default: return 'Həkim';
+            }
+        }
+        
+        function toggleMute() {
+            isMuted = !isMuted;
+            const micBtn = document.querySelector('.control-btn:nth-child(1) i');
+            micBtn.classList.toggle('fa-microphone');
+            micBtn.classList.toggle('fa-microphone-slash');
+            alert(isMuted ? 'Mikrofon söndürüldü' : 'Mikrofon açıldı');
+        }
+        
+        function toggleVideo() {
+            isVideoOff = !isVideoOff;
+            const videoBtn = document.querySelector('.control-btn:nth-child(2) i');
+            videoBtn.classList.toggle('fa-video');
+            videoBtn.classList.toggle('fa-video-slash');
+            alert(isVideoOff ? 'Kamera söndürüldü' : 'Kamera açıldı');
+        }
+        
+        function endCall() {
+            document.getElementById('doctorSelectionView').style.display = 'block';
+            document.getElementById('videoCallView').style.display = 'none';
+            selectedDoctor = null;
+            alert('Görüşmə bitdi. Həkim sizinlə əlaqə saxlaya bilər.');
+        }
+        
+        // Əczaçılıq funksiyaları
+        function selectPharmacy(pharmacyId) {
+            alert(`${getPharmacyName(pharmacyId)} seçildi. Sifariş səhifəsinə yönləndirilirsiniz...`);
+            // Burada əsl tətbiqdə sifariş səhifəsinə yönləndirmə olardı
+        }
+        
+        function getPharmacyName(pharmacyId) {
+            switch(pharmacyId) {
+                case 'ph1': return 'Sehirli Əczaçılıq';
+                case 'ph2': return 'MediCare Əczaçılıq';
+                case 'ph3': return 'Təcili Dərman Xidməti';
+                default: return 'Əczaxana';
+            }
+        }
+        
+        // Səhiyyə profili
+        function showFirstAid() {
+            alert('İlk yardım təlimatları səhifəsinə yönləndirilir...');
+            // Burada əsl tətbiqdə ilk yardım təlimatları səhifəsinə yönləndirmə olardı
         }
     </script>
 </body>
