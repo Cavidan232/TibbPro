@@ -3,742 +3,689 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TİBBLE - Təcili Tibbi Yardım</title>
+    <title>TİBBLE XTREME | Video Dəstəkli Təcili Yardım</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
     <style>
-        * {
+        :root {
+            --med-emergency: #FF0033;
+            --med-dark: #0A1128;
+            --med-accent: #034078;
+            --med-light: #EAF2EF;
+            --med-highlight: #00B4D8;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #F8F9FA;
+            color: #212529;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
             overflow-x: hidden;
         }
-
-        .container {
-            max-width: 100%;
+        
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 17, 40, 0.9);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+        }
+        
+        .video-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .video-container {
+            width: 90%;
+            max-width: 800px;
+            background: var(--med-dark);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transform: scale(0.8);
+            transition: transform 0.5s ease;
+            position: relative;
+        }
+        
+        .video-overlay.active .video-container {
+            transform: scale(1);
+        }
+        
+        .video-header {
+            background: linear-gradient(90deg, var(--med-emergency), #CC0029);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .close-video {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .video-content {
+            position: relative;
+            height: 450px;
+        }
+        
+        #remote-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #local-video {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 150px;
+            height: 113px;
+            border-radius: 10px;
+            border: 2px solid var(--med-emergency);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .video-controls {
+            background: var(--med-dark);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        
+        .control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--med-accent);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .control-btn:hover {
+            transform: scale(1.1);
+            background: var(--med-highlight);
+        }
+        
+        .control-btn.emergency {
+            background: var(--med-emergency);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 0, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 51, 0); }
+        }
+        
+        .main-container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            min-height: 100vh;
         }
-
-        .header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
-            backdrop-filter: blur(10px);
-        }
-
-        .logo {
-            font-size: 3em;
-            font-weight: bold;
-            color: #e74c3c;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 10px;
-        }
-
-        .subtitle {
-            color: #666;
-            font-size: 1.2em;
-            margin-bottom: 20px;
-        }
-
-        .emergency-btn {
-            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--med-dark), var(--med-accent));
             color: white;
-            border: none;
-            padding: 20px 40px;
-            font-size: 1.8em;
-            font-weight: bold;
+            padding: 40px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.03"><path d="M30,10 L50,30 L70,10 L90,30 L70,50 L90,70 L70,90 L50,70 L30,90 L10,70 L30,50 L10,30 Z" fill="white"/></svg>');
+        }
+        
+        .logo {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-badge {
+            background: var(--med-emergency);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .hero-btn {
+            padding: 15px 30px;
             border-radius: 50px;
+            border: none;
+            font-weight: 600;
             cursor: pointer;
-            box-shadow: 0 15px 30px rgba(231, 76, 60, 0.4);
             transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-            margin: 10px;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .emergency-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(231, 76, 60, 0.6);
-        }
-
-        .location-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-        }
-
-        .section-title {
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-
-        .icon {
-            width: 30px;
-            height: 30px;
-            background: linear-gradient(45deg, #3498db, #2980b9);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        
+        .primary-btn {
+            background: linear-gradient(45deg, var(--med-emergency), #CC0029);
             color: white;
-            font-weight: bold;
         }
-
-        .btn {
-            background: linear-gradient(45deg, #27ae60, #229954);
+        
+        .secondary-btn {
+            background: rgba(255,255,255,0.2);
             color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            margin: 5px;
-            box-shadow: 0 8px 15px rgba(39, 174, 96, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
         }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(39, 174, 96, 0.4);
+        
+        .hero-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-
-        .location-status {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .success { background: rgba(46, 204, 113, 0.2); color: #27ae60; }
-        .error { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
-        .info { background: rgba(52, 152, 219, 0.2); color: #3498db; }
-
-        .emergency-categories {
+        
+        .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            gap: 25px;
+            margin-bottom: 30px;
         }
-
-        .category-card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px;
+        
+        .feature-card {
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border-left: 5px solid #e74c3c;
-        }
-
-        .category-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .category-title {
-            font-size: 1.3em;
-            color: #e74c3c;
-            margin-bottom: 15px;
-            font-weight: bold;
-        }
-
-        .steps {
-            list-style: none;
-            counter-reset: step-counter;
-        }
-
-        .steps li {
-            counter-increment: step-counter;
-            margin-bottom: 10px;
-            padding: 10px;
-            background: rgba(52, 152, 219, 0.1);
-            border-radius: 8px;
             position: relative;
-            padding-left: 50px;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.05);
         }
-
-        .steps li::before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #3498db;
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, var(--med-highlight), #0096C7);
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: white;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--med-dark);
+        }
+        
+        .emergency-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: var(--med-dark);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 0.9em;
+            gap: 15px;
         }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
+        
+        .section-title i {
+            color: var(--med-emergency);
+        }
+        
+        .ambulance-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .ambulance-option {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #E9ECEF;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ambulance-option:hover {
+            border-color: var(--med-highlight);
+        }
+        
+        .ambulance-option.selected {
+            border-color: var(--med-emergency);
+            background: linear-gradient(135deg, rgba(255,0,51,0.05) 0%, rgba(255,255,255,1) 100%);
+            box-shadow: 0 5px 20px rgba(255,0,51,0.1);
+        }
+        
+        .ambulance-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--med-emergency);
+        }
+        
+        .ambulance-time {
+            background: var(--med-highlight);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .map-container {
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+        }
+        
+        #map {
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            animation: fadeIn 0.3s ease;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: white;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #aaa;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #e74c3c;
-        }
-
-        .warning {
-            background: rgba(255, 193, 7, 0.2);
-            color: #f39c12;
+        
+        .paramedic-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.9);
             padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            font-weight: bold;
-            text-align: center;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            z-index: 100;
         }
-
+        
+        .paramedic-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--med-highlight);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        .emergency-btn {
+            background: linear-gradient(45deg, var(--med-emergency), #CC0029);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 1.5rem;
+            border-radius: 15px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(255,0,51,0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .emergency-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255,0,51,0.4);
+        }
+        
+        .emergency-btn:active {
+            transform: translateY(0);
+        }
+        
+        .floating-video-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, var(--med-emergency), #CC0029);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 30px rgba(255,0,51,0.3);
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-video-btn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+        
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
+            .hero-buttons {
+                flex-direction: column;
             }
             
-            .header {
-                padding: 20px;
-            }
-            
-            .logo {
-                font-size: 2em;
-            }
-            
-            .emergency-btn {
-                padding: 15px 30px;
-                font-size: 1.4em;
-            }
-            
-            .emergency-categories {
+            .ambulance-selector {
                 grid-template-columns: 1fr;
             }
-        }
-
-        .hidden {
-            display: none;
+            
+            .video-content {
+                height: 300px;
+            }
+            
+            #local-video {
+                width: 100px;
+                height: 75px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="logo">🚑 TİBBLE</div>
-            <div class="subtitle">Təcili Tibbi Yardım Sistemi</div>
+    <!-- Video Görüşmə Overlay -->
+    <div class="video-overlay" id="videoOverlay">
+        <div class="video-container">
+            <div class="video-header">
+                <h3><i class="fas fa-user-md"></i> Həkimlə Görüşmə</h3>
+                <button class="close-video" id="closeVideo"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="video-content">
+                <video id="remote-video" autoplay></video>
+                <video id="local-video" autoplay muted></video>
+            </div>
+            <div class="video-controls">
+                <button class="control-btn" title="Səsi Bağla"><i class="fas fa-microphone-slash"></i></button>
+                <button class="control-btn" title="Kameranı Bağla"><i class="fas fa-video-slash"></i></button>
+                <button class="control-btn emergency" title="Təcili Yardım">
+                    <i class="fas fa-ambulance"></i>
+                </button>
+                <button class="control-btn" title="Ekranı Paylaş"><i class="fas fa-share-square"></i></button>
+                <button class="control-btn" title="Çat"><i class="fas fa-comment-medical"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Əsas Kontent -->
+    <div class="main-container">
+        <div class="hero-section">
+            <div class="logo">
+                <i class="fas fa-ambulance"></i> TİBBLE 
+                <span class="logo-badge">XTREME</span>
+            </div>
+            <p style="font-size: 1.2rem; max-width: 600px; opacity: 0.9;">
+                Video dəstəkli təcili tibbi yardım platforması. Həkimlə birbaşa görüş, real-time ambulans izləmə və AI köməkçi ilə təhlükəsizlik.
+            </p>
+            
+            <div class="hero-buttons">
+                <button class="hero-btn primary-btn" id="startVideoCall">
+                    <i class="fas fa-video"></i> Canlı Görüşmə Başlat
+                </button>
+                <button class="hero-btn secondary-btn" onclick="getLocation()">
+                    <i class="fas fa-location-arrow"></i> Konumumu Paylaş
+                </button>
+            </div>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3 class="feature-title">Canlı Həkim Görüşməsi</h3>
+                <p>
+                    Təcili vəziyyətdə bir kliklə həkimlə video görüşməyə qoşulun. 
+                    Həkim sizə real vaxt rejimində təlimat verəcək.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-ambulance"></i>
+                </div>
+                <h3 class="feature-title">Smart Ambulans Seçimi</h3>
+                <p>
+                    Vəziyyətinizə uyğun tibbi nəqliyyat seçin: standart ambulans, 
+                    reanimasiya maşını və ya tibb helikopteri.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3 class="feature-title">Real-time İzləmə</h3>
+                <p>
+                    Ambulansın hərəkətini xəritədə canlı izləyin. 
+                    Çatma müddəti və marşrut haqqında dəqiq məlumat.
+                </p>
+            </div>
+        </div>
+        
+        <div class="emergency-section">
+            <h2 class="section-title">
+                <i class="fas fa-ambulance"></i> Təcili Yardım Sifarişi
+            </h2>
+            
+            <p>
+                Vəziyyətinizə uyğun tibbi nəqliyyat növünü seçin və təcili yardım çağırın:
+            </p>
+            
+            <div class="ambulance-selector">
+                <div class="ambulance-option selected">
+                    <div class="ambulance-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <h3>Standart Ambulans</h3>
+                    <p>İlk tibbi yardım və nəqliyyat</p>
+                    <span class="ambulance-time">5-10 dəq</span>
+                </div>
+                
+                <div class="ambulance-option">
+                    <div class="ambulance-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Reanimasiya Maşını</h3>
+                    <p>Kritik vəziyyətlər üçün</p>
+                    <span class="ambulance-time">3-7 dəq</span>
+                </div>
+                
+                <div class="ambulance-option">
+                    <div class="ambulance-icon">
+                        <i class="fas fa-procedures"></i>
+                    </div>
+                    <h3>Xəstə Maşını</h3>
+                    <p>Yataq və xüsusi qulluq</p>
+                    <span class="ambulance-time">10-15 dəq</span>
+                </div>
+                
+                <div class="ambulance-option">
+                    <div class="ambulance-icon">
+                        <i class="fas fa-helicopter"></i>
+                    </div>
+                    <h3>Tibb Helikopteri</h3>
+                    <p>Uzaq məsafələr üçün</p>
+                    <span class="ambulance-time">15-30 dəq</span>
+                </div>
+            </div>
+            
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="paramedic-info">
+                    <div class="paramedic-avatar">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div>
+                        <h4 style="margin: 0;">Dr. Aydan Quliyeva</h4>
+                        <p style="margin: 5px 0 0; font-size: 0.9rem; color: #6C757D;">
+                            <i class="fas fa-ambulance" style="color: var(--med-emergency);"></i> 
+                            <span id="arrival-time">4.2 km (6 dəq)</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
             <button class="emergency-btn" onclick="callEmergency()">
-                🆘 TƏCİLİ YARDIM ÇAĞIR
+                <i class="fas fa-phone-alt"></i> 112-Nİ ÇAĞIR
             </button>
         </div>
-
-        <div class="location-section">
-            <div class="section-title">
-                <div class="icon">📍</div>
-                Konum Paylaşımı
-            </div>
-            <p style="margin-bottom: 15px;">Təcili yardım komandası sizə daha tez çatabilməsi üçün konumunuzu paylaşın:</p>
-            <button class="btn" onclick="getLocation()">Konumu Paylaş</button>
-            <button class="btn" onclick="shareLocationBySMS()">SMS ilə Göndər</button>
-            <div id="locationStatus" class="location-status hidden"></div>
-            <div id="coordinates" class="hidden"></div>
-        </div>
-
-        <div class="emergency-categories">
-            <div class="category-card">
-                <div class="category-title">💔 Ürək Dayanması</div>
-                <ul class="steps">
-                    <li>Xəstənin şüurunu yoxlayın (çiyin vururaq)</li>
-                    <li>Nəfəs alıb vermədiyini yoxlayın</li>
-                    <li>CPR başladın: döş qəfəsinin ortasına basın</li>
-                    <li>Dəqiqədə 100-120 dəfə basın</li>
-                    <li>30 basma, 2 nəfəs verməyi təkrarlayın</li>
-                </ul>
-                <button class="btn" onclick="showModal('heart')">Ətraflı Təlimat</button>
-            </div>
-
-            <div class="category-card">
-                <div class="category-title">🩸 Qanaxma</div>
-                <ul class="steps">
-                    <li>Yaranı təmiz parça ilə örtün</li>
-                    <li>Möhkəm basın və təzyiq yaradın</li>
-                    <li>Yaranı ürəkdən yuxarı qaldırın</li>
-                    <li>Qan kəsilməyənə qədər basın</li>
-                    <li>Bandaj və ya bağla bərkidin</li>
-                </ul>
-                <button class="btn" onclick="showModal('bleeding')">Ətraflı Təlimat</button>
-            </div>
-
-            <div class="category-card">
-                <div class="category-title">🫁 Nəfəs Darlığı</div>
-                <ul class="steps">
-                    <li>Xəstəni sakit saxlayın</li>
-                    <li>Düz oturun və irəli əyilin</li>
-                    <li>Ləng və dərin nəfəs almağa köməklik edin</li>
-                    <li>İnhaler varsa istifadə edin</li>
-                    <li>Təcili yardım gələnə qədər yanında qalın</li>
-                </ul>
-                <button class="btn" onclick="showModal('breathing')">Ətraflı Təlimat</button>
-            </div>
-
-            <div class="category-card">
-                <div class="category-title">🔥 Yanıq</div>
-                <ul class="steps">
-                    <li>Yanıq yerini dərhal soyuq su ilə yuyun</li>
-                    <li>10-15 dəqiqə soyuq su altında tutun</li>
-                    <li>Soyuq, nəm parça ilə örtün</li>
-                    <li>Körpüklərə toxunmayın</li>
-                    <li>Ağrı üçün paracetamol verin</li>
-                </ul>
-                <button class="btn" onclick="showModal('burn')">Ətraflı Təlimat</button>
-            </div>
-
-            <div class="category-card">
-                <div class="category-title">🧠 İnsult</div>
-                <ul class="steps">
-                    <li>FAST testini tətbiq edin</li>
-                    <li>Üz asimmetriyasını yoxlayın</li>
-                    <li>Qol zəifliyini test edin</li>
-                    <li>Nitq pozulmasına fikir verin</li>
-                    <li>Dərhal təcili yardım çağırın</li>
-                </ul>
-                <button class="btn" onclick="showModal('stroke')">Ətraflı Təlimat</button>
-            </div>
-
-            <div class="category-card">
-                <div class="category-title">🍽️ Boğulma</div>
-                <ul class="steps">
-                    <li>Xəstəni öskürməyə həvəsləndiirin</li>
-                    <li>Kürəyinə 5 dəfə vurun</li>
-                    <li>Qarın bölgəsinə Heimlich manevri</li>
-                    <li>5 dəfə yuxarı doğru basın</li>
-                    <li>Obyekt çıxana qədər təkrarlayın</li>
-                </ul>
-                <button class="btn" onclick="showModal('choking')">Ətraflı Təlimat</button>
-            </div>
-        </div>
     </div>
-
-    <!-- Modal -->
-    <div id="emergencyModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <div id="modalContent"></div>
-        </div>
+    
+    <!-- Üzən Video Butonu -->
+    <div class="floating-video-btn" id="floatingVideoBtn">
+        <i class="fas fa-video"></i>
     </div>
-
+    
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
     <script>
-        let currentLocation = null;
-
-        function callEmergency() {
-            if (confirm('103 nömrəsini çağırmaq istəyirsiniz?')) {
-                window.location.href = 'tel:103';
+        // Xəritə Konfiqurasiyası
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZSIsImEiOiJjanZ6a2Z6MW0wYnVtM3lwN2Q1bTgwa2J6In0.abcdefghijk';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v12',
+            center: [49.8671, 40.4093], // Bakı koordinatları
+            zoom: 14
+        });
+        
+        // İstifadəçi markeri
+        new mapboxgl.Marker({ color: '#FF0033' })
+            .setLngLat([49.8671, 40.4093])
+            .setPopup(new mapboxgl.Popup().setHTML("<b>Sizin konumunuz</b>"))
+            .addTo(map);
+            
+        // Ambulans markeri
+        new mapboxgl.Marker({ color: '#034078' })
+            .setLngLat([49.8700, 40.4100])
+            .setPopup(new mapboxgl.Popup().setHTML("<b>Reanimasiya Ambulansı</b><br>4.2 km uzaqlıqda"))
+            .addTo(map);
+        
+        // Video görüşmə funksiyaları
+        const videoOverlay = document.getElementById('videoOverlay');
+        const startVideoBtn = document.getElementById('startVideoCall');
+        const floatingVideoBtn = document.getElementById('floatingVideoBtn');
+        const closeVideoBtn = document.getElementById('closeVideo');
+        
+        function toggleVideoCall() {
+            videoOverlay.classList.toggle('active');
+            
+            if (videoOverlay.classList.contains('active')) {
+                // Mock video stream
+                document.getElementById('remote-video').innerHTML = `
+                    <source src="https://example.com/doctor-stream" type="video/mp4">
+                `;
+                
+                // Mock local stream
+                navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                    .then(stream => {
+                        document.getElementById('local-video').srcObject = stream;
+                    })
+                    .catch(err => {
+                        console.error("Kamera ərizəsi uğursuz oldu:", err);
+                    });
+            } else {
+                // Streamləri dayandır
+                const localVideo = document.getElementById('local-video');
+                if (localVideo.srcObject) {
+                    localVideo.srcObject.getTracks().forEach(track => track.stop());
+                }
             }
         }
-
+        
+        startVideoBtn.addEventListener('click', toggleVideoCall);
+        floatingVideoBtn.addEventListener('click', toggleVideoCall);
+        closeVideoBtn.addEventListener('click', toggleVideoCall);
+        
+        // Ambulans seçimi
+        document.querySelectorAll('.ambulance-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.ambulance-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // Seçimə görə vaxtı yenilə
+                const timeText = this.querySelector('.ambulance-time').textContent;
+                document.getElementById('arrival-time').textContent = timeText;
+            });
+        });
+        
+        // Təcili çağrı
+        function callEmergency() {
+            const selectedAmbulance = document.querySelector('.ambulance-option.selected h3').textContent;
+            if (confirm(`${selectedAmbulance} çağırmaq üçün 112 nömrəsini səsləndirmək istəyirsiniz?`)) {
+                window.location.href = "tel:112";
+            }
+        }
+        
+        // Konum alma
         function getLocation() {
-            const statusDiv = document.getElementById('locationStatus');
-            const coordinatesDiv = document.getElementById('coordinates');
-            
-            statusDiv.className = 'location-status info';
-            statusDiv.textContent = 'Konum alınır...';
-            statusDiv.classList.remove('hidden');
-
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        currentLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        
-                        statusDiv.className = 'location-status success';
-                        statusDiv.innerHTML = `
-                            ✅ Konum uğurla alındı!<br>
-                            Dəqiqlik: ${Math.round(position.coords.accuracy)}m
-                        `;
-                        
-                        coordinatesDiv.innerHTML = `
-                            <strong>Koordinatlar:</strong><br>
-                            Enlik: ${currentLocation.lat.toFixed(6)}<br>
-                            Uzunluq: ${currentLocation.lng.toFixed(6)}<br>
-                            <a href="https://maps.google.com/?q=${currentLocation.lat},${currentLocation.lng}" target="_blank" style="color: #3498db;">Google Maps-də Aç</a>
-                        `;
-                        coordinatesDiv.classList.remove('hidden');
+                    position => {
+                        alert(`Konumunuz alındı:\nEnlem: ${position.coords.latitude}\nUzunluq: ${position.coords.longitude}`);
                     },
-                    function(error) {
-                        statusDiv.className = 'location-status error';
-                        switch(error.code) {
-                            case error.PERMISSION_DENIED:
-                                statusDiv.textContent = '❌ Konum icazəsi verilməyib';
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                statusDiv.textContent = '❌ Konum məlumatı əlçatan deyil';
-                                break;
-                            case error.TIMEOUT:
-                                statusDiv.textContent = '❌ Konum alınması vaxt aşımına uğradı';
-                                break;
-                            default:
-                                statusDiv.textContent = '❌ Naməlum xəta baş verdi';
-                                break;
-                        }
+                    error => {
+                        alert(`Konum alınmadı: ${error.message}`);
                     }
                 );
             } else {
-                statusDiv.className = 'location-status error';
-                statusDiv.textContent = '❌ Brauzer konum dəstəklənmir';
+                alert("Brauzeriniz konum xidmətini dəstəkləmir");
             }
         }
-
-        function shareLocationBySMS() {
-            if (!currentLocation) {
-                alert('Əvvəlcə konumunuzu alın!');
-                return;
-            }
-
-            const message = `Təcili Yardım! Mənim koordinatlarım: ${currentLocation.lat}, ${currentLocation.lng}. Google Maps linki: https://maps.google.com/?q=${currentLocation.lat},${currentLocation.lng}`;
-            const phoneNumber = prompt('SMS göndəriləcək nömrəni daxil edin:');
-            
-            if (phoneNumber) {
-                window.location.href = `sms:${phoneNumber}?body=${encodeURIComponent(message)}`;
-            }
-        }
-
-        function showModal(type) {
-            const modal = document.getElementById('emergencyModal');
-            const content = document.getElementById('modalContent');
-            
-            const modalContents = {
-                heart: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">💔 Ürək Dayanması - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ Bu təlimatları tətbiq etmədən əvvəl mütləq 103-ü çağırın!</div>
-                    
-                    <h3>1. Şüur Yoxlanması:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstənin çiynini yavaş-yavaş vururaq "Heyy, eşidirsən?" deyə çağırın</li>
-                        <li>Cavab vermirsə, gözlər açılmırsa - şüursuz hesab edin</li>
-                        <li>Nəfəs almağını yoxlayın (döş qəfəsinə baxın)</li>
-                    </ul>
-
-                    <h3>2. CPR Texnikası:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstəni bərk səthə uzanın</li>
-                        <li>Döş qəfəsinin ortasında (döş sümüyünün aşağı yarısı)</li>
-                        <li>Bir əlinizin ovucunu qoyun, digər əli üstündə</li>
-                        <li>Barmaqları bir-birinə keçirin</li>
-                        <li>Kollər düz, çiyinlər döş üzərində</li>
-                    </ul>
-
-                    <h3>3. Basma Texnikası:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>5-6 sm dərinliyində basın</li>
-                        <li>Dəqiqədə 100-120 basma</li>
-                        <li>Hər basma arasında tam boşalma</li>
-                        <li>30 basma, 2 nəfəs verməyi təkrarlayın</li>
-                    </ul>
-
-                    <h3>4. Nəfəs Verməsi:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Başı geriyə əyin, çənəni qaldırın</li>
-                        <li>Burnu bağlayın, ağızdan ağıza nəfəs verin</li>
-                        <li>Döş qəfəsinin qalxdığını görün</li>
-                        <li>2 saniyə ərzində 1 nəfəs</li>
-                    </ul>
-                `,
-                bleeding: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">🩸 Qanaxma - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ Ağır qanaxmalarda mütləq 103-ü çağırın!</div>
-                    
-                    <h3>1. Birbaşa Təzyiq:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Təmiz parça və ya steril tülbent istifadə edin</li>
-                        <li>Yaranın üzərinə birbaşa qoyun</li>
-                        <li>Güclü təzyiq tətbiq edin</li>
-                        <li>Əgər qan keçirsə, üstünə əlavə parça əlavə edin</li>
-                    </ul>
-
-                    <h3>2. Qaldırma:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Yaranı ürəkdən yuxarı qaldırın</li>
-                        <li>Bu qan axınını azaldır</li>
-                        <li>Yaralı uzuv qırıq deyilsə tətbiq edin</li>
-                    </ul>
-
-                    <h3>3. Təzyiq Nöqtələri:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Qol qanaxması: qoltuqaltı arteriya</li>
-                        <li>Ayaq qanaxması: qasıq arteriyası</li>
-                        <li>Baş qanaxması: temporal arteriya</li>
-                    </ul>
-
-                    <h3>4. Əlavə Tədbirlər:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Yaranı yumayin - yalnız ətrafını təmizləyin</li>
-                        <li>Şok əlamətlərinə fikir verin</li>
-                        <li>Xəstəni isti saxlayın</li>
-                        <li>Su və ya yemek verməyin</li>
-                    </ul>
-                `,
-                breathing: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">🫁 Nəfəs Darlığı - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ Şiddətli nəfəs darlığında dərhal 103-ü çağırın!</div>
-                    
-                    <h3>1. Xəstəni Sakit Saxlayın:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Panikaya düşməməsinə köməklik edin</li>
-                        <li>Sakitləşdirici səslə danışın</li>
-                        <li>Ətrafdan insanları uzaqlaşdırın</li>
-                    </ul>
-
-                    <h3>2. Düzgün Mövqe:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Oturaq mövqedə saxlayın</li>
-                        <li>İrəli əyilsin, dirsəklər dizlərdə</li>
-                        <li>Başı aşağı salxın</li>
-                        <li>Rahat geyim üçün yaxanı açın</li>
-                    </ul>
-
-                    <h3>3. Nəfəs Texnikaları:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Ləng və dərin nəfəs almağa həvəsləndiirin</li>
-                        <li>Burndan nəfəs al, ağızdan ver</li>
-                        <li>4 say nəfəs al, 6 say saxla, 8 say ver</li>
-                        <li>Plastik torba ilə nəfəs almağa kömək edin</li>
-                    </ul>
-
-                    <h3>4. Astma Halında:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>İnhaler varsa dərhal istifadə edin</li>
-                        <li>4-6 dəqiqə aralıqla təkrarlaya bilərlər</li>
-                        <li>Yaxşılaşma yoxdursa təcili yardım çağırın</li>
-                    </ul>
-                `,
-                burn: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">🔥 Yanıq - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ Geniş və ya dərin yanıqlarda mütləq 103-ü çağırın!</div>
-                    
-                    <h3>1. Dərhal Soyutma:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Yanıq yerini dərhal soyuq su altına tutun</li>
-                        <li>15-20 dəqiqə soyuq su ilə yuyun</li>
-                        <li>Buz istifadə etməyin - tərs təsir göstərər</li>
-                        <li>Çox soyuq su da zərərlidir</li>
-                    </ul>
-
-                    <h3>2. Yanıq Dərəcələri:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li><strong>1-ci dərəcə:</strong> Qızartı, şişkinlik, ağrı</li>
-                        <li><strong>2-ci dərəcə:</strong> Körpüklər, şiddətli ağrı</li>
-                        <li><strong>3-cü dərəcə:</strong> Dərinin necə olması, ağrısızlık</li>
-                    </ul>
-
-                    <h3>3. İlk Yardım:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Soyuq, nəm parça ilə örtün</li>
-                        <li>Körpükləri patlatmayın</li>
-                        <li>Yapışan geyimləri çıxarmayın</li>
-                        <li>Krem və ya yağ sürtməyin</li>
-                    </ul>
-
-                    <h3>4. Ağrı İdarəsi:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Paracetamol və ya ibuprofen verin</li>
-                        <li>Çox su içməyə həvəsləndiirin</li>
-                        <li>Şok əlamətlərinə diqqət edin</li>
-                    </ul>
-                `,
-                stroke: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">🧠 İnsult - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ İnsult şübhəsində DƏRHAL 103-ü çağırın - vaxt həlledicidir!</div>
-                    
-                    <h3>1. FAST Testi:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li><strong>F (Face):</strong> Üz əyri-büğrüdür? Gülümsəməsini xahiş edin</li>
-                        <li><strong>A (Arms):</strong> Qollar zəifdir? Hər iki qolu qaldırsın</li>
-                        <li><strong>S (Speech):</strong> Nitq pozulub? Sadə cümlə deməsini xahiş edin</li>
-                        <li><strong>T (Time):</strong> Vaxt çox vacibdir - dərhal yardım çağırın</li>
-                    </ul>
-
-                    <h3>2. Əlavə Əlamətlər:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Ani başağrısı və ya başgicəllənmə</li>
-                        <li>Görmə problemləri</li>
-                        <li>Koordinasiya və tarazlığın itirilməsi</li>
-                        <li>Üzün, qolun və ya ayağın keflənməsi</li>
-                    </ul>
-
-                    <h3>3. Xəstəyə Kömək:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstəni rahat mövqedə saxlayın</li>
-                        <li>Başı bir qədər yuxarı qaldırın</li>
-                        <li>Yemək-içmək verməyin</li>
-                        <li>Ağızda qalan yeməyi təmizləyin</li>
-                        <li>Nəfəs yolunun açıq qalmasına fikir verin</li>
-                    </ul>
-
-                    <h3>4. Vaxt Faktoru:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>İlk 3 saat ərzində müalicə kritikdir</li>
-                        <li>"Beyin vaxtdır" - hər dəqiqə vacibdir</li>
-                        <li>Xəstəni mümkün qədər tez xəstəxanaya çatdırın</li>
-                    </ul>
-                `,
-                choking: `
-                    <h2 style="color: #e74c3c; margin-bottom: 20px;">🍽️ Boğulma - Ətraflı Təlimat</h2>
-                    <div class="warning">⚠️ Boğulma halında paniklənməyin - tez və düzgün hərəkət edin!</div>
-                    
-                    <h3>1. Vəziyyəti Qiymətləndirin:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstə danışa bilir? - yüngül boğulma</li>
-                        <li>Danışa bilmir, əlləri boğazında? - ağır boğulma</li>
-                        <li>Üz göyərmir? - dərhal hərəkət edin</li>
-                    </ul>
-
-                    <h3>2. Yüngül Boğulma:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstəni öskürməyə həvəsləndiirin</li>
-                        <li>İrəli əyilməsini təmin edin</li>
-                        <li>Kürəyinə yüngül zərbələr vurun</li>
-                        <li>Özü çıxara bildiyinə imkan verin</li>
-                    </ul>
-
-                    <h3>3. Kürək Zərbələri:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstəni irəli əyilin</li>
-                        <li>Kürəyin ortasında, kürək sümükləri arasında</li>
-                        <li>Ovucun altı ilə 5 güclü zərbə vurun</li>
-                        <li>Hər zərbədən sonra yoxlayın</li>
-                    </ul>
-
-                    <h3>4. Heimlich Manevri (Qarın Sıxılması):</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstənin arxasında dayanın</li>
-                        <li>Qollarınızı qarın ətrafına sarın</li>
-                        <li>Bir yumruq göbəyin üstünə qoyun</li>
-                        <li>Digər əl ilə tutaraq yuxarı-içəri sıxın</li>
-                        <li>5 dəfə tez və güclü sıxın</li>
-                    </ul>
-
-                    <h3>5. Körpələr üçün (1 yaşdan kiçik):</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Körpəni üzü aşağı qolunuzda tutun</li>
-                        <li>Kürəyinə 5 yüngül zərbə vurun</li>
-                        <li>Çevirin, döş qəfəsinə 5 basma</li>
-                        <li>Heimlich manevri tətbiq etməyin</li>
-                    </ul>
-
-                    <h3>6. Şüursuzluq Halında:</h3>
-                    <ul style="margin: 10px 0 20px 20px;">
-                        <li>Xəstəni yerə uzanın</li>
-                        <li>CPR başlayın</li>
-                        <li>Hər nəfəs verməzdən əvvəl ağza baxın</li>
-                        <li>Görünən obyekti barmaqla çıxarın</li>
-                    </ul>
-                `
-            };
-            
-            content.innerHTML = modalContents[type];
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            document.getElementById('emergencyModal').style.display = 'none';
-        }
-
-        // Modal klikində bağlama
-        window.onclick = function(event) {
-            const modal = document.getElementById('emergencyModal');
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-
-        // Səhifə yükləndikdə konum icazəsi istəyin
-        window.onload = function() {
-            if (navigator.geolocation) {
-                // Sadəcə icazə istəyin, amma dərhal konum almayın
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        console.log('Konum icazəsi verildi');
-                    },
-                    function(error) {
-                        console.log('Konum icazəsi rədd edildi');
-                    }
-                );
-            }
-        }
-
-        // Klaviatura qısayolları
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
-            if (event.ctrlKey && event.key === 'e') {
-                event.preventDefault();
-                callEmergency();
-            }
-        });
     </script>
 </body>
 </html>
