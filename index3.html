@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibble Pro - İnnovativ Tibbi Yardım Platformu</title>
+    <style>
+        :root {
+            --primary: #2A6BC9;
+            --secondary: #1DB954;
+            --accent: #FF6B6B;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            color: var(--dark);
+            background-color: var(--light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Navbar */
+        nav {
+            background-color: white;
+            box-shadow: var(--shadow);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .language-selector {
+            display: flex;
+            align-items: center;
+        }
+        
+        .language-selector select {
+            padding: 0.3rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            color: var(--dark);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn:hover {
+            background-color: #1a56b0;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #169c46;
+        }
+        
+        /* Sections */
+        section {
+            padding: 5rem 0;
+        }
+        
+        section:nth-child(even) {
+            background-color: white;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .section-title p {
+            max-width: 700px;
+            margin: 0 auto;
+            color: #666;
+        }
+        
+        /* Problem Section */
+        .problems-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .problem-card {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s;
+        }
+        
+        .problem-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .problem-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Solution Section */
+        .solutions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .solution-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 10px;
+            background-color: var(--light);
+            box-shadow: var(--shadow);
+        }
+        
+        .solution-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Target Audience */
+        .audience-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .audience-item {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            flex: 1 1 250px;
+            max-width: 300px;
+        }
+        
+        .audience-item h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Roadmap */
+        .roadmap {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .roadmap::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+        
+        .roadmap-item {
+            padding: 1rem 2rem;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .roadmap-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            top: 1.5rem;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+            padding-right: 3rem;
+        }
+        
+        .right {
+            left: 50%;
+            padding-left: 3rem;
+        }
+        
+        .right::after {
+            left: -10px;
+        }
+        
+        .roadmap-content {
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .roadmap-content h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section {
+            flex: 1 1 300px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .roadmap::after {
+                left: 31px;
+            }
+            
+            .roadmap-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .roadmap-item::after {
+                left: 21px;
+            }
+            
+            .left, .right {
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container navbar">
+            <div class="logo">Tibble Pro</div>
+            <ul class="nav-links">
+                <li><a href="#problem">Problem</a></li>
+                <li><a href="#solution">Həll</a></li>
+                <li><a href="#audience">Hədəf Qrup</a></li>
+                <li><a href="#advantages">Üstünlüklər</a></li>
+                <li><a href="#business-model">Biznes Modeli</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+            </ul>
+            <div class="language-selector">
+                <select>
+                    <option value="az">AZ</option>
+                    <option value="en">EN</option>
+                    <option value="ru">RU</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Tibble Pro - Sürətli və İnnovativ Tibbi Yardım</h1>
+            <p>Texnologiya ilə səhiyyəni birləşdirərək, təcili tibbi yardımı hər kəs üçün əlçatan edirik</p>
+            <a href="#solution" class="btn">Xidmətlərimizi kəşf edin</a>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem">
+        <div class="container">
+            <div class="section-title">
+                <h2>Mövcud Problemlər</h2>
+                <p>Azərbaycan və region ölkələrində təcili tibbi yardım xidmətləri ilə bağlı əsas problemlər</p>
+            </div>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <h3>Vaxt itkisi</h3>
+                    <p>Ambulansların vaxtında çatmaması (çox vaxt 20-40 dəqiqə)</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Əlçatmazlıq</h3>
+                    <p>Regionlarda, kənd yerlərində təcili yardımın gecikməsi</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Kommunikasiya problemi</h3>
+                    <p>112 çağrı mərkəzinə düşməmək, əlaqənin kəsilməsi</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Şəffaflıq çatışmazlığı</h3>
+                    <p>Vətəndaş bilmədən hansı maşın, nə vaxt gələcək</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Tibbi məlumat boşluğu</h3>
+                    <p>Pasiyentin tibbi tarixçəsinin çağırış zamanı həkimlərdə olmaması</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Dərman çatışmazlığı</h3>
+                    <p>Təcili dərman ehtiyacının evə tez çatdırıla bilməməsi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution">
+        <div class="container">
+            <div class="section-title">
+                <h2>Təklif Edilən Həll</h2>
+                <p>Tibble Pro innovativ texnologiyalar vasitəsilə təcili tibbi yardım sistemində inqilab edir</p>
+            </div>
+            <div class="solutions">
+                <div class="solution-card">
+                    <div class="solution-icon">🚑</div>
+                    <h3>Bir kliklə ambulans çağırışı</h3>
+                    <p>Mobil tətbiq vasitəsilə sürətli və asan ambulans sifarişi</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📍</div>
+                    <h3>Real-time izləmə sistemi</h3>
+                    <p>Ambulansın yerini və gəliş vaxtını real vaxt rejimində izləmə</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">👨‍⚕️</div>
+                    <h3>Video həkim konsultasiyası</h3>
+                    <p>Təcili hallarda və ilkin qiymətləndirmədə peşəkar həkim dəstəyi</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💊</div>
+                    <h3>Əczaçılıq inteqrasiyası</h3>
+                    <p>Lisenziyalı apteklərlə təcili dərman çatdırılması</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📋</div>
+                    <h3>Elektron tibbi kart</h3>
+                    <p>Pasiyentin tibbi tarixçəsi və fövqəladə məlumatlar</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🤖</div>
+                    <h3>AI əsaslı triaj sistemi</h3>
+                    <p>Xəstəliyin təcili dərəcəsinin avtomatik qiymətləndirilməsi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience Section -->
+    <section id="audience">
+        <div class="container">
+            <div class="section-title">
+                <h2>Hədəf Qrup</h2>
+                <p>Tibble Pro geniş istifadəçi kütləsinə xidmət göstərir</p>
+            </div>
+            <div class="audience-container">
+                <div class="audience-item">
+                    <h3>Fərdi istifadəçilər</h3>
+                    <p>Qəfil xəstəlik və ya qəza vəziyyətində təcili yardıma ehtiyacı olan hər kəs</p>
+                </div>
+                <div class="audience-item">
+                    <h3>Xroniki xəstələr</h3>
+                    <p>Şəkər, ürək-damar, təzyiq və s. xəstəliklərdən əziyyət çəkən şəxslər</p>
+                </div>
+                <div class="audience-item">
+                    <h3>Yaşlı insanlar</h3>
+                    <p>Tənha yaşayan və tez tibbi dəstəyə ehtiyac duyan şəxslər</p>
+                </div>
+                <div class="audience-item">
+                    <h3>Uşaqlı ailələr</h3>
+                    <p>Təcili pediatrik yardım və dərman çatdırılmasına ehtiyacı olanlar</p>
+                </div>
+                <div class="audience-item">
+                    <h3>Region əhalisi</h3>
+                    <p>Şəhər mərkəzindən uzaqda yaşayan və tibbi yardıma çətin çıxışı olanlar</p>
+                </div>
+                <div class="audience-item">
+                    <h3>Korporativ müştərilər</h3>
+                    <p>Müəssisələr, şirkətlər, universitetlər (əməkdaşlar üçün tibbi yardım müqaviləsi ilə)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advantages Section -->
+    <section id="advantages">
+        <div class="container">
+            <div class="section-title">
+                <h2>Rəqabət Üstünlükləri</h2>
+                <p>Tibble Pro-nu ənənəvi tibbi xidmətlərdən fərqləndirən xüsusiyyətlər</p>
+            </div>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <h3>Çoxdilli dəstək</h3>
+                    <p>Azərbaycan, İngilis və Rus dillərində tam dəstək</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Ən sürətli cavab</h3>
+                    <p>3-15 dəqiqəlik orta vaxt hədəfi ilə ən sürətli xidmət</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Tam inteqrasiya</h3>
+                    <p>Ambulans + aptek + telemedisin xidmətləri bir platformada</p>
+                </div>
+                <div class="problem-card">
+                    <h3>İstifadəçi dostu interfeys</h3>
+                    <p>Hər yaş qrupu üçün asan başa düşülən və istifadəsi sadə interfeys</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Regionlara fokus</h3>
+                    <p>Yalnız paytaxt deyil, kənd və şəhərciklərdə də xidmət</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Texnoloji innovasiya</h3>
+                    <p>AI və maşın öyrənmə texnologiyaları ilə təchiz olunmuş platforma</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Model Section -->
+    <section id="business-model">
+        <div class="container">
+            <div class="section-title">
+                <h2>Biznes Modeli</h2>
+                <p>Tibble Pro müxtəlif gəlir mənbələri ilə davamlı biznes modelinə malikdir</p>
+            </div>
+            <div class="solutions">
+                <div class="solution-card">
+                    <div class="solution-icon">🎯</div>
+                    <h3>Freemium model</h3>
+                    <p>Əsas xidmətlər pulsuz (ambulans çağırış, lokasiya paylaşımı)</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">💎</div>
+                    <h3>Premium abunəlik</h3>
+                    <p>Aylıq/illik paketlər - ailə üçün endirimlər, əlavə xidmətlər</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">📞</div>
+                    <h3>Video konsultasiya</h3>
+                    <p>"Pay-per-use" - hər istifadə üçün ödəniş modeli</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🤝</div>
+                    <h3>Əczaçılıq partnyorluqları</h3>
+                    <p>Komissiya əsaslı gəlir modeli</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🏢</div>
+                    <h3>Korporativ müştərilər</h3>
+                    <p>Müqavilə əsasında aylıq xidmət haqqı</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <div class="container">
+            <div class="section-title">
+                <h2>İcra Planı (Roadmap)</h2>
+                <p>Tibble Pro-nun inkişaf mərhələləri və gələcək planlar</p>
+            </div>
+            <div class="roadmap">
+                <div class="roadmap-item left">
+                    <div class="roadmap-content">
+                        <h3>Qısa müddət (0-6 ay)</h3>
+                        <p>• MVP tətbiqi hazırlanması</p>
+                        <p>• Bakı üzrə pilot layihə</p>
+                        <p>• İlk 1.000 aktiv istifadəçi</p>
+                    </div>
+                </div>
+                <div class="roadmap-item right">
+                    <div class="roadmap-content">
+                        <h3>Orta müddət (6-12 ay)</h3>
+                        <p>• Regionlara genişlənmə (Sumqayıt, Gəncə, Lənkəran)</p>
+                        <p>• Əczaçılıq partnyorları ilə müqavilələr</p>
+                        <p>• Mobil tətbiq (iOS/Android)</p>
+                    </div>
+                </div>
+                <div class="roadmap-item left">
+                    <div class="roadmap-content">
+                        <h3>Uzun müddət (1-2 il)</h3>
+                        <p>• 100.000+ istifadəçi bazası</p>
+                        <p>• Gürcüstan və Türkiyə bazarına çıxış</p>
+                        <p>• AI əsaslı diaqnostik modul</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Tibble Pro</h3>
+                    <p>Texnologiya ilə səhiyyəni birləşdirərək, təcili tibbi yardımı hər kəs üçün əlçatan edirik</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Əlaqə</h3>
+                    <p>Email: info@tibblepro.az</p>
+                    <p>Tel: +994 12 345 67 89</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Qanuni</h3>
+                    <p>Şirkət forması: MMC</p>
+                    <p>Lisenziya: Tibbi fəaliyyət və dərman satışı üzrə yalnız tərəfdaşlar vasitəsilə</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Tibble Pro. Bütün hüquqlar qorunur.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dil dəyişdirmə funksionallığı
+        document.querySelector('.language-selector select').addEventListener('change', function(e) {
+            // Burada dil dəyişdirmə məntiqi əlavə ediləcək
+            console.log('Seçilmiş dil: ' + e.target.value);
+        });
+        
+        // Navbar linklərinə smooth scroll
+        document.querySelectorAll('.nav-links a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 70,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>

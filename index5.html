@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tibble Pro - Tam Funksionallı Mobil Tətbiq</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2A6BC9;
+            --primary-light: #5a8de0;
+            --secondary: #1DB954;
+            --accent: #FF6B6B;
+            --accent-light: #ff9e9e;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --gray: #6C757D;
+            --gray-light: #ced4da;
+            --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .mobile-container {
+            width: 360px;
+            height: 700px;
+            background-color: white;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            height: 50px;
+        }
+        
+        .status-bar .time {
+            font-weight: 600;
+        }
+        
+        .status-bar .icons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .header .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .header .profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        /* Welcome Section */
+        .welcome-section {
+            margin-bottom: 25px;
+        }
+        
+        .welcome-section h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        
+        .welcome-section p {
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+        
+        /* Emergency Button */
+        .emergency-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+            height: 60px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+        
+        .emergency-btn:hover {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+        }
+        
+        .emergency-btn i {
+            margin-right: 10px;
+        }
+        
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .service-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .service-card h3 {
+            font-size: 0.9rem;
+            color: var(--dark);
+        }
+        
+        /* Tracking Section */
+        .tracking-section {
+            background-color: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .tracking-header h2 {
+            font-size: 1.1rem;
+            color: var(--dark);
+        }
+        
+        .tracking-status {
+            display: flex;
+            align-items: center;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .tracking-status i {
+            margin-right: 5px;
+        }
+        
+        .map-placeholder {
+            height: 150px;
+            background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23e9ecef"/><text x="50" y="50" font-family="Arial" font-size="10" fill="%236c757d" text-anchor="middle" dominant-baseline="middle">Xəritə</text></svg>');
+            background-size: cover;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+        }
+        
+        .driver-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .driver-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .driver-details h3 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+        
+        .driver-details p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Health Stats */
+        .health-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+        }
+        
+        /* Notifications */
+        .notifications {
+            margin-bottom: 25px;
+        }
+        
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .notification-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light);
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-content h3 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+        
+        .notification-content p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 70px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+            padding: 5px;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+        }
+        
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .nav-item span {
+            font-size: 0.7rem;
+        }
+        
+        /* Modal */
+        .modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            display: none;
+        }
+        
+        .modal-content {
+            background-color: white;
+            width: 80%;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-heavy);
+        }
+        
+        .modal-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.cancel {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .modal-btn.cancel:hover {
+            background-color: var(--gray-light);
+        }
+        
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+            color: white;
+        }
+        
+        .modal-btn.confirm:hover {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+        }
+        
+        /* Pages */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary) 0%, #4cd964 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-heavy);
+            cursor: pointer;
+            z-index: 90;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Chat Interface */
+        .chat-container {
+            position: absolute;
+            bottom: 150px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow-heavy);
+            z-index: 95;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            padding: 15px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #4cd964 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f0f2f5;
+        }
+        
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .message.ai {
+            justify-content: flex-start;
+        }
+        
+        .message.user {
+            justify-content: flex-end;
+        }
+        
+        .message-content {
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+        
+        .message.ai .message-content {
+            background-color: white;
+            border: 1px solid var(--gray-light);
+        }
+        
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid var(--gray-light);
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--gray-light);
+            border-radius: 20px;
+            outline: none;
+        }
+        
+        .chat-input button {
+            margin-left: 10px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+        }
+        
+        .loading-dots {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .loading-dots div {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            animation: loading 1.4s infinite ease-in-out both;
+        }
+        
+        .loading-dots div:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dots div:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes loading {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Additional Pages Styles */
+        .doctor-list {
+            margin: 10px 0;
+        }
+        
+        .doctor-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .doctor-item:last-child {
+            border-bottom: none;
+        }
+        
+        .doctor-status {
+            margin-left: auto;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .doctor-status.online {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .doctor-status.offline {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        .pharmacy-section {
+            margin-bottom: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 0.9rem;
+        }
+        
+        .search-bar i {
+            color: var(--gray);
+            margin-right: 10px;
+        }
+        
+        .medication-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .medication-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #4cd964 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+        }
+        
+        .medication-details {
+            flex: 1;
+        }
+        
+        .medication-details h3 {
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .medication-details p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .medication-price {
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .history-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        .history-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 5px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-light);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--primary);
+        }
+        
+        .profile-card {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+        
+        .profile-info h2 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .profile-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="time">14:25</div>
+            <div class="logo">Tibble Pro</div>
+            <div class="icons">
+                <i class="fas fa-signal"></i>
+                <i class="fas fa-wifi"></i>
+                <i class="fas fa-battery-full"></i>
+            </div>
+        </div>
+        
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Tibble Pro</div>
+            <div class="profile" id="profile-btn">
+                <i class="fas fa-user"></i>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <!-- Home Page -->
+            <div class="page active" id="home-page">
+                <div class="welcome-section">
+                    <h1>Salam, Əli!</h1>
+                    <p>Sağlamlıq vəziyyətiniz normaldır. Son yoxlanış: 12.06.2023</p>
+                </div>
+                
+                <div class="health-stats">
+                    <div class="stat-card" id="heart-rate">
+                        <div class="stat-value">72</div>
+                        <div class="stat-label">Nəbiz</div>
+                    </div>
+                    <div class="stat-card" id="blood-pressure">
+                        <div class="stat-value">120/80</div>
+                        <div class="stat-label">Təzyiq</div>
+                    </div>
+                    <div class="stat-card" id="oxygen-level">
+                        <div class="stat-value">98%</div>
+                        <div class="stat-label">Oksigen</div>
+                    </div>
+                </div>
+                
+                <div class="emergency-btn" id="emergency-btn">
+                    <i class="fas fa-ambulance"></i>
+                    <span>Təcili Yardım Çağır</span>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card" data-page="doctor-page">
+                        <div class="service-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3>Həkimlə Görüş</h3>
+                    </div>
+                    <div class="service-card" data-page="pharmacy-page">
+                        <div class="service-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Dərman Sifarişi</h3>
+                    </div>
+                    <div class="service-card" data-page="history-page">
+                        <div class="service-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3>Tarixçə</h3>
+                    </div>
+                    <div class="service-card" data-page="profile-page">
+                        <div class="service-icon">
+                            <i class="fas fa-medkit"></i>
+                        </div>
+                        <h3>Sağlamlıq Kartı</h3>
+                    </div>
+                </div>
+                
+                <div class="tracking-section">
+                    <div class="tracking-header">
+                        <h2>Son Sifariş</h2>
+                        <div class="tracking-status">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Tamamlandı</span>
+                        </div>
+                    </div>
+                    <div class="map-placeholder">
+                        Xəritə görünüşü
+                        <div class="map-overlay">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="driver-details">
+                            <h3>Nəriman Nərimanov</h3>
+                            <p>+994 50 123 45 67</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notifications">
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h3>Növbəti yoxlanış</h3>
+                            <p>15 İyul 2023, 10:30</p>
+                        </div>
+                    </div>
+                    <div class="notification-item">
+                        <div class="notification-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="notification-content">
+                            <h3>Dərman xatırlatması</h3>
+                            <p>Metformin, səhər 1 tablet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Doctor Page -->
+            <div class="page" id="doctor-page">
+                <div class="welcome-section">
+                    <h1>Həkimlə Görüş</h1>
+                    <p>Peşəkar həkimlərlə video və ya səsli görüş edin</p>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card" id="video-consult">
+                        <div class="service-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>Video Görüş</h3>
+                    </div>
+                    <div class="service-card" id="audio-consult">
+                        <div class="service-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <h3>Səsli Görüş</h3>
+                    </div>
+                    <div class="service-card" id="message-doctor">
+                        <div class="service-icon">
+                            <i class="fas fa-comment-medical"></i>
+                        </div>
+                        <h3>Mesaj Yaz</h3>
+                    </div>
+                    <div class="service-card" id="schedule-consult">
+                        <div class="service-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Görüş Təyin et</h3>
+                    </div>
+                </div>
+                
+                <div class="tracking-section">
+                    <h2 style="margin-bottom: 15px;">Mövcud Həkimlər</h2>
+                    <div class="doctor-list">
+                        <div class="doctor-item">
+                            <div class="driver-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="driver-details">
+                                <h3>Dr. Aydan Həsənova</h3>
+                                <p>Ümumi həkim • 5 il təcrübə</p>
+                            </div>
+                            <div class="doctor-status online">Online</div>
+                        </div>
+                        <div class="doctor-item">
+                            <div class="driver-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="driver-details">
+                                <h3>Dr. Rəşad Abdullayev</h3>
+                                <p>Kardiolog • 8 il təcrübə</p>
+                            </div>
+                            <div class="doctor-status offline">Offline</div>
+                        </div>
+                        <div class="doctor-item">
+                            <div class="driver-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="driver-details">
+                                <h3>Dr. Günel Məmmədova</h3>
+                                <p>Pediatr • 6 il təcrübə</p>
+                            </div>
+                            <div class="doctor-status online">Online</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pharmacy Page -->
+            <div class="page" id="pharmacy-page">
+                <div class="welcome-section">
+                    <h1>Dərman Sifarişi</h1>
+                    <p>Dərmanlarınızı sürətli çatdırılma ilə sifariş edin</p>
+                </div>
+                
+                <div class="pharmacy-section">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Dərman axtarın..." id="medication-search">
+                    </div>
+                    
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Paracetamol 500mg</h3>
+                            <p>20 tablet • Ağrı kesici</p>
+                        </div>
+                        <div class="medication-price">3.50 AZN</div>
+                    </div>
+                    
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-capsules"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Amoxicillin 250mg</h3>
+                            <p>14 kapsul • Antibiotik</p>
+                        </div>
+                        <div class="medication-price">12.80 AZN</div>
+                    </div>
+                    
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-prescription-bottle"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Vitamin D3 1000 IU</h3>
+                            <p>60 tablet • Vitamin</p>
+                        </div>
+                        <div class="medication-price">8.90 AZN</div>
+                    </div>
+                    
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-tablets"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Ibuprofen 400mg</h3>
+                            <p>30 tablet • Antiinflamator</p>
+                        </div>
+                        <div class="medication-price">5.20 AZN</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- History Page -->
+            <div class="page" id="history-page">
+                <div class="welcome-section">
+                    <h1>Tarixçə</h1>
+                    <p>Keçmiş müraciətləriniz və nəticələriniz</p>
+                </div>
+                
+                <div class="history-item">
+                    <div class="notification-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="history-date">15 İyun 2023</div>
+                        <h3>Video konsultasiya - Dr. Aydan Həsənova</h3>
+                        <p>Ümumi sağlamlıq yoxlanışı tamamlandı</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="notification-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="history-date">12 İyun 2023</div>
+                        <h3>Dərman sifarişi</h3>
+                        <p>Paracetamol, Vitamin D3 - Çatdırıldı</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="notification-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="history-date">10 İyun 2023</div>
+                        <h3>Sağlamlıq ölçüləri</h3>
+                        <p>Nəbiz: 75, Təzyiq: 118/78</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="notification-icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="history-date">8 İyun 2023</div>
+                        <h3>Səsli konsultasiya - Dr. Rəşad Abdullayev</h3>
+                        <p>Kardioloji məsləhət alındı</p>
+                    </div>
+                </div>
+                
+                <div class="history-item">
+                    <div class="notification-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="notification-content">
+                        <div class="history-date">5 İyun 2023</div>
+                        <h3>Təcili yardım çağırışı</h3>
+                        <p>Uğurla tamamlandı - 8 dəqiqə</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Page -->
+            <div class="page" id="profile-page">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="profile-info">
+                            <h2>Əli Məmmədov</h2>
+                            <p>Doğum tarixi: 15.03.1985</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tam ad</label>
+                        <input type="text" value="Əli Məmmədov" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Telefon nömrəsi</label>
+                        <input type="tel" value="+994 50 123 45 67">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" value="ali.mammadov@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Qan qrupu</label>
+                        <select>
+                            <option>A(II) Rh+</option>
+                            <option>B(III) Rh+</option>
+                            <option>O(I) Rh+</option>
+                            <option>AB(IV) Rh+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Allergiyalar</label>
+                        <textarea rows="3" placeholder="Bildiyin allergiyalarınızı qeyd edin">Penisilin, yoz tozları</textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Xroniki xəstəliklər</label>
+                        <textarea rows="3" placeholder="Xroniki xəstəliklərinizi qeyd edin">Tip 2 diabeti</textarea>
+                    </div>
+                </div>
+                
+                <div class="tracking-section">
+                    <h2 style="margin-bottom: 15px;">Fəal dərmanlar</h2>
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Metformin 850mg</h3>
+                            <p>Günə 2 dəfə, yeməkdən sonra</p>
+                        </div>
+                    </div>
+                    
+                    <div class="medication-item">
+                        <div class="medication-icon">
+                            <i class="fas fa-capsules"></i>
+                        </div>
+                        <div class="medication-details">
+                            <h3>Vitamin D3 1000 IU</h3>
+                            <p>Günə 1 dəfə, səhər</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Services Page -->
+            <div class="page" id="services-page">
+                <div class="welcome-section">
+                    <h1>Bütün Xidmətlər</h1>
+                    <p>Tibble Pro platformasının tam xidmətləri</p>
+                </div>
+                
+                <div class="services-grid">
+                    <div class="service-card" data-page="doctor-page">
+                        <div class="service-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3>Həkimlə Görüş</h3>
+                    </div>
+                    <div class="service-card" data-page="pharmacy-page">
+                        <div class="service-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Dərman Sifarişi</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-vial"></i>
+                        </div>
+                        <h3>Laborator Testləri</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-x-ray"></i>
+                        </div>
+                        <h3>Radioloji Müayinə</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <h3>Evdə Baxım</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-wheelchair"></i>
+                        </div>
+                        <h3>Fiziki Terapiya</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>Psikoloji Dəstək</h3>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3>Sağlamlıq Monitorinqi</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AI Assistant -->
+        <div class="ai-assistant" id="ai-assistant">
+            <i class="fas fa-robot"></i>
+        </div>
+        
+        <!-- Chat Interface -->
+        <div class="chat-container" id="chat-container">
+            <div class="chat-header">
+                <h3>Tibbi Köməkçi</h3>
+                <i class="fas fa-times" id="close-chat"></i>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="message ai">
+                    <div class="message-content">
+                        Salam! Mən Tibble Pro süni intellekt köməkçisiyəm. Sizə necə kömək edə bilərəm?
+                    </div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Mesajınızı yazın..." id="chat-input">
+                <button id="send-message"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" data-page="home-page">
+                <i class="fas fa-home"></i>
+                <span>Ana Səhifə</span>
+            </div>
+            <div class="nav-item" data-page="services-page">
+                <i class="fas fa-list"></i>
+                <span>Xidmətlər</span>
+            </div>
+            <div class="nav-item" data-page="history-page">
+                <i class="fas fa-history"></i>
+                <span>Tarixçə</span>
+            </div>
+            <div class="nav-item" data-page="profile-page">
+                <i class="fas fa-user"></i>
+                <span>Profil</span>
+            </div>
+        </div>
+        
+        <!-- Emergency Modal -->
+        <div class="modal" id="emergency-modal">
+            <div class="modal-content">
+                <h2 class="modal-title">Təcili Yardım Çağırılsın?</h2>
+                <p>Yaxınlığınızdakı ambulans xidmətinə yönləndiriləcəksiniz</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn cancel" id="cancel-btn">Ləğv et</button>
+                    <button class="modal-btn confirm" id="confirm-btn">Təsdiqlə</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Video Consultation Modal -->
+        <div class="modal" id="video-modal">
+            <div class="modal-content">
+                <h2 class="modal-title">Video Konsultasiya</h2>
+                <p>Video görüş üçün 15 AZN ödəniş tələb olunur. Davam etmək istəyirsiniz?</p>
+                <div class="modal-buttons">
+                    <button class="modal-btn cancel" id="cancel-video">Ləğv et</button>
+                    <button class="modal-btn confirm" id="confirm-video">Ödəniş et</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const emergencyBtn = document.getElementById('emergency-btn');
+        const emergencyModal = document.getElementById('emergency-modal');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const confirmBtn = document.getElementById('confirm-btn');
+        const navItems = document.querySelectorAll('.nav-item');
+        const serviceCards = document.querySelectorAll('.service-card');
+        const pages = document.querySelectorAll('.page');
+        const aiAssistant = document.getElementById('ai-assistant');
+        const chatContainer = document.getElementById('chat-container');
+        const closeChat = document.getElementById('close-chat');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const sendMessage = document.getElementById('send-message');
+        const videoConsult = document.getElementById('video-consult');
+        const videoModal = document.getElementById('video-modal');
+        const cancelVideo = document.getElementById('cancel-video');
+        const confirmVideo = document.getElementById('confirm-video');
+        const medicationSearch = document.getElementById('medication-search');
+        const statCards = document.querySelectorAll('.stat-card');
+        
+        // Show emergency modal
+        emergencyBtn.addEventListener('click', () => {
+            emergencyModal.style.display = 'flex';
+        });
+        
+        // Hide emergency modal
+        cancelBtn.addEventListener('click', () => {
+            emergencyModal.style.display = 'none';
+        });
+        
+        // Confirm emergency call
+        confirmBtn.addEventListener('click', () => {
+            emergencyModal.style.display = 'none';
+            simulateEmergencyCall();
+        });
+        
+        // Simulate emergency call process
+        function simulateEmergencyCall() {
+            showNotification('Təcili yardım çağırışınız qəbul edildi. Ambulans 5-10 dəqiqə ərzində sizə çatacaq.', 'success');
+            
+            // Show loading animation
+            const loadingHTML = `
+                <div class="loading">
+                    <div class="loading-dots">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            `;
+            
+            // Update tracking section
+            const trackingSection = document.querySelector('.tracking-section');
+            trackingSection.innerHTML = `
+                <div class="tracking-header">
+                    <h2>Aktiv Sifariş</h2>
+                    <div class="tracking-status">
+                        <i class="fas fa-truck-moving"></i>
+                        <span>Yolda</span>
+                    </div>
+                </div>
+                ${loadingHTML}
+                <div class="driver-info">
+                    <div class="driver-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="driver-details">
+                        <h3>Sürücü yoldadır</h3>
+                        <p>Tezliklə məlumat yenilənəcək</p>
+                    </div>
+                </div>
+            `;
+            
+            // Simulate driver assignment after 3 seconds
+            setTimeout(() => {
+                trackingSection.innerHTML = `
+                    <div class="tracking-header">
+                        <h2>Aktiv Sifariş</h2>
+                        <div class="tracking-status">
+                            <i class="fas fa-truck-moving"></i>
+                            <span>Yolda</span>
+                        </div>
+                    </div>
+                    <div class="map-placeholder">
+                        Ambulans yoldadır
+                        <div class="map-overlay">
+                            <i class="fas fa-expand"></i>
+                        </div>
+                    </div>
+                    <div class="driver-info">
+                        <div class="driver-avatar">
+                            <i class="fas fa-user-nurse"></i>
+                        </div>
+                        <div class="driver-details">
+                            <h3>Rəşad İsmayılov</h3>
+                            <p>+994 55 234 56 78 • 7 dəqiqə</p>
+                        </div>
+                    </div>
+                `;
+            }, 3000);
+        }
+        
+        // Navigation
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const pageId = item.getAttribute('data-page');
+                navigateToPage(pageId, item);
+            });
+        });
+        
+        // Service cards navigation
+        serviceCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const pageId = card.getAttribute('data-page');
+                if (pageId) {
+                    const navItem = document.querySelector(`[data-page="${pageId}"]`);
+                    navigateToPage(pageId, navItem);
+                }
+            });
+        });
+        
+        // Navigation function
+        function navigateToPage(pageId, navItem = null) {
+            // Update active nav item
+            navItems.forEach(nav => nav.classList.remove('active'));
+            if (navItem) navItem.classList.add('active');
+            
+            // Show corresponding page
+            pages.forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) targetPage.classList.add('active');
+        }
+        
+        // AI Assistant Toggle
+        aiAssistant.addEventListener('click', () => {
+            chatContainer.style.display = 'flex';
+        });
+        
+        closeChat.addEventListener('click', () => {
+            chatContainer.style.display = 'none';
+        });
+        
+        // Send message functionality
+        sendMessage.addEventListener('click', sendChatMessage);
+        
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+        
+        function sendChatMessage() {
+            const message = chatInput.value.trim();
+            if (message) {
+                addMessage(message, 'user');
+                chatInput.value = '';
+                
+                // Show typing indicator
+                addTypingIndicator();
+                
+                // Simulate AI response after a short delay
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    aiResponse(message);
+                }, 1500);
+            }
+        }
+        
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.textContent = text;
+            
+            messageDiv.appendChild(contentDiv);
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function addTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="loading-dots">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        function aiResponse(userMessage) {
+            const responses = {
+                'sağlamlıq': 'Sağlamlıq vəziyyətinizlə bağlı mənə soruşmaq istədiyiniz bir şey varmı? Hazırda nəbziniz 72, təzyiqiniz 120/80 və oksigen səviyyəniz 98% göstərir.',
+                'həkim': 'Həkim konsultasiyası üçün "Həkimlə Görüş" bölməsindən istifadə edə bilərsiniz. Hal-hazırda Dr. Aydan Həsənova və Dr. Günel Məmmədova onlayndır.',
+                'dərman': 'Dərman sifarişi vermək üçün "Dərman Sifarişi" bölməsinə keçid edə bilərsiniz. 30 dəqiqədə çatdırırıq!',
+                'təcili': 'Təcili yardım üçün qırmızı düyməyə basaraq ambulans çağıra bilərsiniz. Ortalama gəlmə vaxtı 5-8 dəqiqədir.',
+                'tarixçə': 'Tarixçə bölməsindən keçmiş konsultasiyalarınızı, dərman sifarişlərinizi və test nəticələrinizi görə bilərsiniz.',
+                'qiymət': 'Video konsultasiya 15 AZN, səsli konsultasiya 10 AZN, mesajla konsultasiya 5 AZN-dir.',
+                'ödəniş': 'Ödəniş kartla, bank transferi və ya mobil ödəniş sistemləri ilə həyata keçirilir.',
+                'vaxt': 'Həkimlərimiz həftənin 7 günü, günün 24 saatı xidmətinizdədir.'
+            };
+            
+            let response = "Bağışlayın, sizi tam başa düşmədim. Sağlamlıq, həkim, dərman, təcili yardım və ya digər xidmətlərlə bağlı suallarınız varsa, mənə daha aydın yazın.";
+            
+            const lowerMessage = userMessage.toLowerCase();
+            for (const [keyword, resp] of Object.entries(responses)) {
+                if (lowerMessage.includes(keyword)) {
+                    response = resp;
+                    break;
+                }
+            }
+            
+            // Check for greetings
+            if (lowerMessage.includes('salam') || lowerMessage.includes('hello') || lowerMessage.includes('necəsən')) {
+                response = "Salam! Mən Tibble Pro AI köməkçisiyəm. Sizə tibbi xidmətlərlə bağlı necə kömək edə bilərəm?";
+            }
+            
+            addMessage(response, 'ai');
+        }
+        
+        // Video consultation modal
+        if (videoConsult) {
+            videoConsult.addEventListener('click', () => {
+                videoModal.style.display = 'flex';
+            });
+        }
+        
+        if (cancelVideo) {
+            cancelVideo.addEventListener('click', () => {
+                videoModal.style.display = 'none';
+            });
+        }
+        
+        if (confirmVideo) {
+            confirmVideo.addEventListener('click', () => {
+                videoModal.style.display = 'none';
+                showNotification('Ödəniş uğurla tamamlandı! Həkim sizi qısa müddət ərzində zəng edəcək.', 'success');
+            });
+        }
+        
+        // Medication search functionality
+        if (medicationSearch) {
+            medicationSearch.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const medicationItems = document.querySelectorAll('.medication-item');
+                
+                medicationItems.forEach(item => {
+                    const medicationName = item.querySelector('h3').textContent.toLowerCase();
+                    if (medicationName.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // Health stats interactivity
+        statCards.forEach(card => {
+            card.addEventListener('click', () => {
+                showHealthDetails(card);
+            });
+        });
+        
+        function showHealthDetails(card) {
+            const statLabel = card.querySelector('.stat-label').textContent;
+            const statValue = card.querySelector('.stat-value').textContent;
+            
+            let message = '';
+            switch(statLabel) {
+                case 'Nəbiz':
+                    message = `Nəbziniz ${statValue} dəqiqədə. Bu normal aralıqdadır (60-100).`;
+                    break;
+                case 'Təzyiq':
+                    message = `Qan təzyiqiniz ${statValue} mmHg. Bu optimal səviyyədədir.`;
+                    break;
+                case 'Oksigen':
+                    message = `Oksigen saturasiyası ${statValue}. Bu çox yaxşı göstəricidir.`;
+                    break;
+            }
+            
+            showNotification(message, 'info');
+        }
+        
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification-toast');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.style.cssText = `
+                position: fixed;
+                top: 70px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: ${type === 'success' ? '#d4edda' : type === 'error' ? '#f8d7da' : '#d1ecf1'};
+                color: ${type === 'success' ? '#155724' : type === 'error' ? '#721c24' : '#0c5460'};
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 1000;
+                max-width: 90%;
+                text-align: center;
+                font-weight: 500;
+                border: 1px solid ${type === 'success' ? '#c3e6cb' : type === 'error' ? '#f5c6cb' : '#b6d4fe'};
+            `;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 4000);
+        }
+        
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.querySelector('.time');
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            timeElement.textContent = `${hours}:${minutes}`;
+        }
+        
+        // Initialize and update time every minute
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>
